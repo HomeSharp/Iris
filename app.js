@@ -24,6 +24,10 @@ router.route('/User/Devices')
   .post(userCtrl.postDevice)
   .get(userCtrl.getDevices);
 
+// Endpoint module
+router.route('/Device/Module')
+  .get(deviceCtrl.getModule);
+
 // Endpoint device lamp
 //router.route('/Device/Lamp')
 //  .get(deviceCtrl.getLamp);
