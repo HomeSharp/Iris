@@ -28,13 +28,17 @@ router.route('/User/Devices')
 router.route('/Device/Module')
   .get(deviceCtrl.getModule);
 
+// Endpoint device RainGauge
+router.route('/Device/RainGauge')
+  .get(deviceCtrl.getRainGauge);
+
+// Endpoint device thermometer
+router.route('/Device/Thermostate')
+  .get(deviceCtrl.getThermostate);
+
 // Endpoint device lamp
 //router.route('/Device/Lamp')
 //  .get(deviceCtrl.getLamp);
-
-// Endpoint device thermometer
-//router.route('/Device/Thermometer')
-//  .get(deviceCtrl.getThermometer);
 
 // all routes go through /api
 app.use('/api', router);

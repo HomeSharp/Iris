@@ -60,23 +60,6 @@ exports.getRainGauge = function(req, callback) {
 
 };
 
-exports.getStation = function(req, callback) {
-
-  var scale = "max";
-  var dateEnd = "last";
-  var type = "Temperature, CO2, Humidity, Pressure, Noise"
-  var params = req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd;
-
-  netatmoDevice(params, function(err, info){
-    if(err) {
-      callback(err);
-    }
-    else {
-      callback(null, info);
-    }
-  });
-};
-
 exports.getThermostate = function(req, callback) {
 
   var scale = "max";
