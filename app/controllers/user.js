@@ -23,5 +23,10 @@ exports.getDevices = function(req, res) {
 };
 
 exports.postDevice = function(req, res) {
+  //Data kommer in från Quarts (om jag förstår det rätt, kom in från Postman)
+  //access_token och brand
+
+  var reqInfo = { token: req.body.access_token, brand: req.body.brand };
+
   res.send(req.body);
 };
