@@ -7,7 +7,8 @@ Home Sharp API (Code Name: Iris) 
 3. run "node app"
 
 ## Tests
-1. Set the "access"-variable to a valid access_token in Netatmo.test.js file
-2. Start server as described above
-3. In second console go to /Iris/app/Tests
-4. run "./node_modules/mocha/bin/mocha Netatmo.test.js" or just "mocha Netatmo.test.js" (if you have installed mocha globally)
+1. run "npm install mocha -g"
+2. Set the "access"-variable to a valid access_token in Netatmo.test.js file
+3. Start server as described above
+4. In second console go to /Iris/app/Tests
+5. run "mocha Netatmo.test.js"
