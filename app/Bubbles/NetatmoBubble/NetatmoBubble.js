@@ -1,4 +1,5 @@
 var http = require('http');
+var HTTPError = require('node-http-error');
 
 exports.getDevices = function(req, callback) {
 
@@ -15,12 +16,27 @@ exports.getDevices = function(req, callback) {
     });
 
     resp.on('end', function () {
-      callback(null, str);
+
+      var netResponse = JSON.parse(str);
+
+      // if netatmo returns error in JSON response
+      if(netResponse.error){
+        if(netResponse.error.code === 2)
+        {
+          // invalid access token
+          callback(new HTTPError(401, netResponse.error.message));
+        } else {
+          // default error
+          callback(new HTTPError(404, netResponse.error.message));
+        }
+      } else {
+        callback(null, str);
+      }
     });
 
   }).on("error", function(e){
-    console.log("Got error: " + e.message);
-    callback(new Error("Got error: " + e.message));
+    // request error
+    callback(new HTTTPError(401, "Got error: " + e.message));
   });
 };
 
