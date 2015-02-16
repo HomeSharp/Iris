@@ -2,6 +2,7 @@ var superagent = require('superagent')
 var expect = require('expect.js')
 
 describe('Iris netatmo funktionality', function(){
+  // Change this access token to a valid one before running the tests
   var access = '54dc81f3207759349fe610c5|96cd67255b3f7b4134987e000c0769ba';
   var brand = "Netatmo";
 
