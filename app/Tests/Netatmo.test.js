@@ -9,9 +9,8 @@ describe('Iris netatmo funktionality', function(){
     superagent.get('http://localhost:3000/api/User/Devices')
       .set('brand', brand)
       .end(function(e, res){
-        console.log(res.status)
         expect(e).to.not.be.ok()
-        expect(res.status).to.equal(401)
+        expect(res.status).to.equal(400)
         done()
       })
   })
@@ -32,7 +31,7 @@ describe('Iris netatmo funktionality', function(){
       .set('access_token', access)
       .end(function(e, res){
         expect(e).to.not.be.ok()
-        expect(res.status).to.equal(401)
+        expect(res.status).to.equal(400)
         done()
       })
   })
@@ -43,7 +42,7 @@ describe('Iris netatmo funktionality', function(){
       .set('brand', 'brand')
       .end(function(e, res){
         expect(e).to.not.be.ok()
-        expect(res.status).to.equal(401)
+        expect(res.status).to.equal(400)
         done()
       })
   })
@@ -59,29 +58,4 @@ describe('Iris netatmo funktionality', function(){
         done()
       })
   })
-
-  // it('retrieves an object', function(done){
-  //   superagent.get('http://localhost:3000/collections/test/'+id)
-  //     .end(function(e, res){
-  //       // console.log(res.body)
-  //       expect(e).to.eql(null)
-  //       expect(typeof res.body).to.eql('object')
-  //       expect(res.body._id.length).to.eql(24)
-  //       expect(res.body._id).to.eql(id)
-  //       done()
-  //     })
-  // })
-
-  //
-  // it('updates an object', function(done){
-  //   superagent.put('http://localhost:3000/collections/test/'+id)
-  //     .send({name: 'Peter'
-  //       , email: 'peter@yahoo.com'})
-  //     .end(function(e, res){
-  //       // console.log(res.body)
-  //       expect(e).to.eql(null)
-  //       expect(typeof res.body).to.eql('object')
-  //       expect(res.body.msg).to.eql('success')
-  //       done()
-  //     })
 })
