@@ -21,8 +21,8 @@ var router = express.Router();
 
 // Endpoint user devices
 router.route('/User/Devices')
-  .post(userCtrl.postDevice)
-  .get(userCtrl.getDevices);
+    .post(userCtrl.postDevice)
+    .get(userCtrl.getDevices);
 
 // Endpoint module
 router.route('/Device/Module')

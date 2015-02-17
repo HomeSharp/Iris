@@ -55,7 +55,7 @@ exports.getModule = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature, CO2, Humidity, Pressure, Noise"
+  var type = "Temperature, CO2, Humidity, Pressure, Noise";
 
   var options = {
     host: 'api.netatmo.net',
@@ -77,7 +77,7 @@ exports.getRainGauge = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Rain"
+  var type = "Rain";
 
   var options = {
     host: 'api.netatmo.net',
@@ -99,7 +99,7 @@ exports.getThermostate = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature, Sp_Temperature"
+  var type = "Temperature, Sp_Temperature";
 
   var options = {
     host: 'api.netatmo.net',
