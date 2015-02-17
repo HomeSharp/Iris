@@ -46,7 +46,7 @@ exports.getDevices = function(req, callback) {
       callback(err);
     }
     else {
-      callback(null, info);
+      callback(null, answer);
     }
   });
 };
@@ -99,7 +99,7 @@ exports.getThermostate = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature, Sp_Temperature"  
+  var type = "Temperature, Sp_Temperature"
 
   var options = {
     host: 'api.netatmo.net',
