@@ -36,7 +36,15 @@ function netatmoRequest(options, callback) {
 
 exports.getRainGauge = function(req, callback){
     //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
-    var rainGaugeArr = [];
+    Private_getDeviceFromDevices(req, "NAModule3", callback);
+};
+exports.getThermostate = function(req, callback){
+
+    Private_getDeviceFromDevices(req, "NATherm1", callback);
+};
+
+function Private_getDeviceFromDevices(req,moduleToLookFor, callback){
+    var Arr = [];
 
     Private_getDevices(req, function(error, devices){
 
@@ -46,20 +54,19 @@ exports.getRainGauge = function(req, callback){
         else {
             devices = JSON.parse(devices);
             for(var i = 0; i < devices.body.modules.length; i++){
-                if(devices.body.modules[i].type === "NAModule3"){ //Figure out if Module is RainGauge
-                    rainGaugeArr.push(devices.body.modules[i]);
+                if(devices.body.modules[i].type === moduleToLookFor){ //Figure out if Module is moduleToLookFor
+                    Arr.push(devices.body.modules[i]);
                 }
             }
 
-            if(rainGaugeArr.length === 0){
-                callback(new HTTPError(404, "No RainGauge found"));
+            if(Arr.length === 0){
+                callback(new HTTPError(404, "No "+ moduleToLookFor +" found"));
             }else{
-                callback(null, JSON.stringify(rainGaugeArr));
+                callback(null, JSON.stringify(Arr));
             }
         }
     });
-};
-
+}
 
 function Private_getDevices(req, callback){
     var options = {

@@ -76,6 +76,26 @@ exports.getRainGauge = function(req, callback){
     }
 };
 
+exports.getThermostate = function(req, callback){
+    var callBubble;
+
+    if(callBubble = getBrandBubble(req,callback)){
+
+        callBubble.getThermostate(req.reqInfo, function(error, Thermostate){
+
+            if(error !== null){
+
+                callback(error);
+            }else if(Thermostate === undefined) {
+                callback(new HTTPError(404, "Thermostate not found"));
+            }else{
+                callback(null,Thermostate);
+            }
+
+        });
+    }
+};
+
 function chooseBubble(brand) {
   var bubble;
   switch(brand)
