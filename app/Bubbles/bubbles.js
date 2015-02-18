@@ -84,7 +84,6 @@ exports.getThermostate = function(req, callback){
         callBubble.getThermostate(req.reqInfo, function(error, Thermostate){
 
             if(error !== null){
-
                 callback(error);
             }else if(Thermostate === undefined) {
                 callback(new HTTPError(404, "Thermostate not found"));

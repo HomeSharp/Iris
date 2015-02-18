@@ -43,12 +43,13 @@ exports.getThermostate = function(req, callback){
     Private_getDeviceFromDevices(req, "NATherm1", callback);
 };
 
-function Private_getDeviceFromDevices(req,moduleToLookFor, callback){
+function Private_getDeviceFromDevices(req, moduleToLookFor, callback){
     var Arr = [];
 
     Private_getDevices(req, function(error, devices){
 
         if(error) {
+
             callback(error);
         }
         else {
@@ -153,7 +154,8 @@ exports.getModule = function(req, callback) {
 
 };*/
 
-exports.getThermostate = function(req, callback) {
+//TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.
+/*exports.getThermostate = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
@@ -173,4 +175,4 @@ exports.getThermostate = function(req, callback) {
     }
   });
 
-};
+};*/
