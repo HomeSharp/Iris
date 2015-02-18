@@ -37,6 +37,7 @@ function netatmoRequest(options, callback) {
 exports.getRainGauge = function(req, callback){
     //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
     var rainGaugeArr = [];
+
     Private_getDevices(req, function(error, devices){
 
         if(error) {
@@ -56,14 +57,7 @@ exports.getRainGauge = function(req, callback){
                 callback(null, JSON.stringify(rainGaugeArr));
             }
         }
-
-
-
-
     });
-
-
-
 };
 
 
@@ -129,7 +123,8 @@ exports.getModule = function(req, callback) {
 
 };
 
-exports.getRainGauge = function(req, callback) {
+//TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.
+/*exports.getRainGauge = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
@@ -149,7 +144,7 @@ exports.getRainGauge = function(req, callback) {
     }
   });
 
-};
+};*/
 
 exports.getThermostate = function(req, callback) {
 

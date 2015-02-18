@@ -23,6 +23,7 @@ exports.getDevices = function(req, callback) {
     callBubble.getDevices(req.reqInfo , function(err, devices) {
       if(err){
         // a Bubble plugin error occured
+
         callback(err);
       }
       else if(devices === undefined) {
@@ -59,9 +60,11 @@ exports.getRainGauge = function(req, callback){
     var callBubble;
 
     if(callBubble = getBrandBubble(req,callback)){
+
         callBubble.getRainGauge(req.reqInfo, function(error, RainGauge){
 
             if(error !== null){
+
                 callback(error);
             }else if(RainGauge === undefined) {
                 callback(new HTTPError(404, "RainGauge not found"));
