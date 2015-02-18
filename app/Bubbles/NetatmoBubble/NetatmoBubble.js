@@ -51,6 +51,23 @@ exports.getDevices = function(req, callback) {
   });
 };
 
+exports.getUser = function(req, callback){
+    var options = {
+        host: "api.netatmo.net",
+        path: "/api/getuser?access_token=" + req.token
+    };
+
+    netatmoRequest(options, function(error, answer){
+        if(error !== null){
+            callback(error);
+        }else{
+            callback(null, answer);
+        }
+    });
+
+};
+
+
 exports.getModule = function(req, callback) {
 
   var scale = "max";

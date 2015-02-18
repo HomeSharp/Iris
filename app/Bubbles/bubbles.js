@@ -16,11 +16,9 @@ function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
 exports.getDevices = function(req, callback) {
   var callBubble;
   // 1 choose proper bubble
-  //var callBubble = chooseBubble(req.reqInfo.brand);
-  if(callBubble = getBrandBubble(req, callback)) {
-/*    // Bubble not found
-    callback(new HTTPError(400, "Brand not found"));
-  } else {*/
+
+  if(callBubble = getBrandBubble(req, callback)) { // Hämtning av callBubble är utbruten...
+
     // 2 call that bubble
     callBubble.getDevices(req.reqInfo , function(err, devices) {
       if(err){
@@ -37,10 +35,24 @@ exports.getDevices = function(req, callback) {
 };
 
 exports.getUser = function(req, callback){
-    var callBubble = chooseBubble(req.reqInfo.brand);
-    if(callBubble === undefined){
-        //invalid/none-existent brand
-        callback(new Http);
+    var callBubble;
+
+    if(callBubble = getBrandBubble(req, callback)) { //get correct bubble
+
+        callBubble.getUser(req.reqInfo, function(error, user){
+
+            if(error !== null){
+                callback(error);
+            }else if(user === undefined){
+                //Couldn't get User
+                console.log("Could not get user, user was undefined");
+
+                callback(new HTTPError(404, "User was undefined"));
+            }else{
+                callback(null, user);
+            }
+
+        });
 
 
     }
