@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({
 var router = express.Router();
 
 // Endpoint user
-//router.route('/User')
-//  .get(userCtrl.getUser);
+router.route('/User')
+  .get(userCtrl.getUser);
 
 // Endpoint user devices
 router.route('/User/Devices')
