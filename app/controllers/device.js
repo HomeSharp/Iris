@@ -59,6 +59,30 @@ exports.getRainGauge = function(req, res) {
 };
 
 exports.getThermostate = function(req, res) {
+    console.log("getThermostate is called");
+    // ger info till Bubbles om:
+    // 1) access_token 2) brand
+
+    // förväntar sig att få tillbaka en Thermostate
+    requiredHeaders(req, function(error, reqInfo){
+
+        if(error !== null){
+            respondError(error, res)
+        }else{
+            Bubbles.getThermostate(reqInfo, function(err, device) {
+                if (err !== null) {
+                    console.log(err);
+                    respondError(err, res);
+                }
+                res.send(device);
+            });
+        }
+    });
+};
+
+//TODO: this is the old getThermostate function. I saved it because i'm unsure...
+/*
+exports.getThermostate = function(req, res) {
   // ger info till Bubbles om:
   // 1) access_token 2) brand
 
@@ -73,4 +97,4 @@ exports.getThermostate = function(req, res) {
     }
     res.send(device);
   });
-};
+};*/
