@@ -19,7 +19,26 @@ function respondError(err, res){
 };
 
 exports.getUser = function(req, res) {
+    console.log("getUser is called");
+    //Check for legit header...
+    requiredHeaders(req, function(error, reqInfo){
 
+        if(error !== null){
+            respondError(error, res);
+        }else{
+            Bubbles.getUser(reqInfo, function(error, user){
+
+                if(error !== null){
+                    respondError(error, res);
+                }else{
+                    res.send(user);
+                }
+
+
+            });
+        }
+
+    });
 };
 
 exports.getDevices = function(req, res) {

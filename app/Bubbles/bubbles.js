@@ -26,6 +26,10 @@ exports.getDevices = function(req, callback) {
   }
 };
 
+exports.getUser = function(req, callback){
+
+}
+
 function chooseBubble(brand) {
   var bubble;
   switch(brand)
