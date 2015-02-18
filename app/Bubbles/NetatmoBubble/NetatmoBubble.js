@@ -35,8 +35,34 @@ function netatmoRequest(options, callback) {
 };
 
 exports.getRainGauge = function(req, callback){
+    //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
+    var rainGaugeArr = [];
+    Private_getDevices(req, function(error, devices){
 
-    var devices = get
+        if(error) {
+            callback(error);
+        }
+        else {
+            devices = JSON.parse(devices);
+            for(var i = 0; i < devices.body.modules.length; i++){
+                if(devices.body.modules[i].type === "NAModule3"){ //Figure out if Module is RainGauge
+                    rainGaugeArr.push(devices.body.modules[i]);
+                }
+            }
+
+            if(rainGaugeArr.length === 0){
+                callback(new HTTPError(404, "No RainGauge found"));
+            }else{
+                callback(null, JSON.stringify(rainGaugeArr));
+            }
+        }
+
+
+
+
+    });
+
+
 
 };
 
