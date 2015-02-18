@@ -34,21 +34,34 @@ function netatmoRequest(options, callback) {
   });
 };
 
+exports.getRainGauge = function(req, callback){
+
+    var devices = get
+
+};
+
+
+function Private_getDevices(req, callback){
+    var options = {
+        host: 'api.netatmo.net',
+        path: '/api/devicelist?access_token=' + req.token
+    };
+
+    netatmoRequest(options, function(err, answer){
+        if(err) {
+            callback(err);
+        }
+        else {
+            callback(null, answer);
+        }
+    });
+}
+
+
 exports.getDevices = function(req, callback) {
 
-  var options = {
-    host: 'api.netatmo.net',
-    path: '/api/devicelist?access_token=' + req.token
-  };
+    Private_getDevices(req, callback);
 
-  netatmoRequest(options, function(err, answer){
-    if(err) {
-      callback(err);
-    }
-    else {
-      callback(null, answer);
-    }
-  });
 };
 
 exports.getUser = function(req, callback){

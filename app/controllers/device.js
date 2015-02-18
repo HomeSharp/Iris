@@ -1,4 +1,23 @@
 var Bubbles = require('../Bubbles/bubbles');
+var HTTPError = require('node-http-error');
+
+//This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
+function requiredHeaders(req, next){
+    if(req.headers.access_token === undefined) {
+
+        next(new HTTPError(400, "No access token present in header"));
+    } else if(req.headers.brand === undefined) {
+        next(new HTTPError(400, 'No brand present in header'));
+    } else {
+        next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } });
+    }
+};
+//This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
+function respondError(err, res){
+    res.statusCode = err.status;
+    res.send({ Error: err.message });
+};
+
 
 exports.getModule = function(req, res) {
   // ger info till Bubbles om:
@@ -18,20 +37,25 @@ exports.getModule = function(req, res) {
 };
 
 exports.getRainGauge = function(req, res) {
+    console.log("getRainGauge is called");
   // ger info till Bubbles om:
   // 1) access_token 2) brand
 
   // förväntar sig att få tillbaka en RainGauge
 
-  var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
+    requiredHeaders(req, function(error, reqInfo){
 
-  Bubbles.getRainGauge(reqInfo ,function(err, device) {
-    if(err) {
-      console.log(err);
-      res.send({ Error: "There was a problem getting the rainGauge"});
-    }
-    res.send(device);
-  });
+        if(error !== null){
+            respondError(error, res)
+        }else{
+            Bubbles.getRainGauge(reqInfo, function(err, device) {
+                if (err !== null) {
+                    respondError(err, res);
+                }
+                res.send(device);
+            });
+        }
+    });
 };
 
 exports.getThermostate = function(req, res) {
