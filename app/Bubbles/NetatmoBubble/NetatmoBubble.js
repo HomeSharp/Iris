@@ -10,10 +10,10 @@ function netatmoRequest(options, callback) {
     });
 
     resp.on('end', function () {
-        console.log("HEJ");
-        console.log(str);
+      console.log("HEJ");
+      console.log(str);
       var netResponse = JSON.parse(str);
-        console.log("FUNKA");
+      console.log("FUNKA");
       // if netatmo returns error in JSON response
       if(netResponse.error){
         if(netResponse.error.code === 2)
@@ -36,115 +36,115 @@ function netatmoRequest(options, callback) {
 };
 
 exports.getRainGauge = function(req, callback){
-    //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
-    //Private_getDeviceFromDevices(req, "NAModule3", callback);
+  //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
+  //Private_getDeviceFromDevices(req, "NAModule3", callback);
 
-    var type = "Rain";
-    var scale = "max";
-    var dateEnd = "last";
+  var type = "Rain";
+  var scale = "max";
+  var dateEnd = "last";
 
 
 
-    var options = {
-        host: 'api.netatmo.net',//+ req.deviceId
-        path: '/api/getmeasure?access_token=' + req.token + "&device_id=05:00:00:00:5e:e8"  + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
-    };
+  var options = {
+    host: 'api.netatmo.net',//+ req.deviceId
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=05:00:00:00:5e:e8"  + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+  };
 
-    netatmoRequest(options, function(err, answer){
-        if(err) {
-            callback(err);
-        }
-        else {
-            callback(null, answer);
-        }
-    });
+  netatmoRequest(options, function(err, answer){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, answer);
+    }
+  });
 };
 exports.getThermostate = function(req, callback){
 
-    //Private_getDeviceFromDevices(req, "NATherm1", callback);
+  //Private_getDeviceFromDevices(req, "NATherm1", callback);
 
-    var scale = "max";
-    var dateEnd = "last";
-    var type = "Temperature, Sp_Temperature";
+  var scale = "max";
+  var dateEnd = "last";
+  var type = "Temperature, Sp_Temperature";
 
-    var options = {
-        host: 'api.netatmo.net',
-        path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
-    };
+  var options = {
+    host: 'api.netatmo.net',
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+  };
 
-    netatmoRequest(options, function(err, info){
-        if(err) {
-            callback(err);
-        }
-        else {
-            callback(null, info);
-        }
-    });
+  netatmoRequest(options, function(err, info){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, info);
+    }
+  });
 };
 
 function Private_getDeviceFromDevices(req, moduleToLookFor, callback){
-    var Arr = [];
+  var Arr = [];
 
-    Private_getDevices(req, function(error, devices){
+  Private_getDevices(req, function(error, devices){
 
-        if(error) {
+    if(error) {
 
-            callback(error);
+      callback(error);
+    }
+    else {
+      devices = JSON.parse(devices);
+      for(var i = 0; i < devices.body.modules.length; i++){
+        if(devices.body.modules[i].type === moduleToLookFor){ //Figure out if Module is moduleToLookFor
+          Arr.push(devices.body.modules[i]);
         }
-        else {
-            devices = JSON.parse(devices);
-            for(var i = 0; i < devices.body.modules.length; i++){
-                if(devices.body.modules[i].type === moduleToLookFor){ //Figure out if Module is moduleToLookFor
-                    Arr.push(devices.body.modules[i]);
-                }
-            }
+      }
 
-            if(Arr.length === 0){
-                callback(new HTTPError(404, "No "+ moduleToLookFor +" found"));
-            }else{
-                callback(null, JSON.stringify(Arr));
-            }
-        }
-    });
+      if(Arr.length === 0){
+        callback(new HTTPError(404, "No "+ moduleToLookFor +" found"));
+      }else{
+        callback(null, JSON.stringify(Arr));
+      }
+    }
+  });
 }
 
 function Private_getDevices(req, callback){
-    var options = {
-        host: 'api.netatmo.net',
-        path: '/api/devicelist?access_token=' + req.token
-    };
-    //console.log(req.token);
+  var options = {
+    host: 'api.netatmo.net',
+    path: '/api/devicelist?access_token=' + req.token
+  };
+  //console.log(req.token);
 
-    netatmoRequest(options, function(err, answer){
-        if(err) {
-            callback(err);
-        }
-        else {
-            callback(null, answer);
-        }
-    });
+  netatmoRequest(options, function(err, answer){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, answer);
+    }
+  });
 }
 
 
 exports.getDevices = function(req, callback) {
 
-    Private_getDevices(req, callback);
+  Private_getDevices(req, callback);
 
 };
 
 exports.getUser = function(req, callback){
-    var options = {
-        host: "api.netatmo.net",
-        path: "/api/getuser?access_token=" + req.token
-    };
+  var options = {
+    host: "api.netatmo.net",
+    path: "/api/getuser?access_token=" + req.token
+  };
 
-    netatmoRequest(options, function(error, answer){
-        if(error !== null){
-            callback(error);
-        }else{
-            callback(null, answer);
-        }
-    });
+  netatmoRequest(options, function(error, answer){
+    if(error !== null){
+      callback(error);
+    }else{
+      callback(null, answer);
+    }
+  });
 
 };
 
@@ -171,68 +171,70 @@ exports.getModule = function(req, callback) {
 };
 
 exports.getIndoorModule = function(req, callback) {
-    var scale = "max";
-    var dateEnd = "last";
-    var type = "Temperature,CO2,Humidity";
+  var scale = "max";
+  var dateEnd = "last";
+  var type = "Temperature,CO2,Humidity";
+  console.log(req);
 
-    var options = {
-        host: 'api.netatmo.net',
-        path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceID + "&module_id=" + req.moduleID + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
-    };
+  req = req.reqInfo;
+  var options = {
+    host: 'api.netatmo.net',
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceID + "&module_id=" + req.moduleID + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+  };
 
-    netatmoRequest(options, function(err, info){
-        if(err) {
-            callback(err);
-        }
-        else {
-            callback(null, info);
-        }
-    })
+  netatmoRequest(options, function(err, info){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, info);
+    }
+  })
 };
 
 
 //TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.
 /*exports.getRainGauge = function(req, callback) {
 
-  var scale = "max";
-  var dateEnd = "last";
-  var type = "Rain";
+ var scale = "max";
+ var dateEnd = "last";
+ var type = "Rain";
 
-  var options = {
-    host: 'api.netatmo.net',
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
-  };
+ var options = {
+ host: 'api.netatmo.net',
+ path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+ };
 
-  netatmoRequest(options, function(err, info){
-    if(err) {
-      callback(err);
-    }
-    else {
-      callback(null, info);
-    }
-  });
+ netatmoRequest(options, function(err, info){
+ if(err) {
+ callback(err);
+ }
+ else {
+ callback(null, info);
+ }
+ });
 
-};*/
+ };*/
 
 //TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.
 /*exports.getThermostate = function(req, callback) {
 
-  var scale = "max";
-  var dateEnd = "last";
-  var type = "Temperature, Sp_Temperature";
+ var scale = "max";
+ var dateEnd = "last";
+ var type = "Temperature, Sp_Temperature";
 
-  var options = {
-    host: 'api.netatmo.net',
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
-  };
+ var options = {
+ host: 'api.netatmo.net',
+ path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+ };
 
-  netatmoRequest(options, function(err, info){
-    if(err) {
-      callback(err);
-    }
-    else {
-      callback(null, info);
-    }
-  });
+ netatmoRequest(options, function(err, info){
+ if(err) {
+ callback(err);
+ }
+ else {
+ callback(null, info);
+ }
+ });
 
-};*/
+ };*/

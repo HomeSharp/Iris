@@ -9,7 +9,7 @@ function requiredHeaders(req, next){
   } else if(req.headers.brand === undefined) {
     next(new HTTPError(400, 'No brand present in header'));
   } else {
-    next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } });
+    next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand, query : req.query} });
   }
 };
 
@@ -33,8 +33,6 @@ exports.getUser = function(req, res) {
                 }else{
                     res.send(user);
                 }
-
-
             });
         }
 

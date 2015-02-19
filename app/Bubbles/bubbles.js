@@ -137,7 +137,7 @@ exports.getIndoorModule = function(req, callback){
 
     if(callBubble = getBrandBubble(req,callback)){
 
-        callBubble.getIndoorModule(req.reqInfo, function(error, IndoorModule){
+        callBubble.getIndoorModule(req, function(error, IndoorModule){
 
             if(error !== null){
 
