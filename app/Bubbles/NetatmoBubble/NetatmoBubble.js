@@ -10,9 +10,9 @@ function netatmoRequest(options, callback) {
     });
 
     resp.on('end', function () {
-      console.log(str);
+
       var netResponse = JSON.parse(str);
-      console.log("FUNKA");
+
       // if netatmo returns error in JSON response
       if(netResponse.error){
         if(netResponse.error.code === 2)
@@ -60,15 +60,16 @@ exports.getRainGauge = function(req, callback){
 };
 exports.getThermostate = function(req, callback){
 
-  //Private_getDeviceFromDevices(req, "NATherm1", callback);
+  var deviceId = req.query.deviceId;
+  var moduleId = req.query.moduleId;
 
-  var scale = "max";
-  var dateEnd = "last";
-  var type = "Temperature, Sp_Temperature";
+  console.log(deviceId);
+  console.log(moduleId);
 
   var options = {
     host: 'api.netatmo.net',
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getthermstate?access_token=' + req.token + "&device_id=" + deviceId + "&module_id=" + moduleId
+
   };
 
   netatmoRequest(options, function(err, info){

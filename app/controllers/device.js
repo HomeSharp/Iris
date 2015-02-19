@@ -4,13 +4,11 @@ var HTTPError = require('node-http-error');
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
 function requiredHeaders(req, next){
   if(req.headers.access_token === undefined) {
-
     next(new HTTPError(400, "No access token present in header"));
   } else if(req.headers.brand === undefined) {
     next(new HTTPError(400, 'No brand present in header'));
   } else {
-
-    next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand, query : req.query} });
+    next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand, query: req.query } });
   }
 };
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
@@ -69,20 +67,36 @@ exports.getRainGauge = function(req, res) {
 
   // förväntar sig att få tillbaka en RainGauge
 
-  requiredHeaders(req, function(error, reqInfo){
+  requiredHeaders(req, function(error, reqInfo) {
 
-    if(error !== null){
+    if (error !== null) {
       respondError(error, res)
-    }else{
-      Bubbles.getRainGauge(reqInfo, function(err, device) {
+    } else {
+      Bubbles.getRainGauge(reqInfo, function (err, device) {
         if (err !== null) {
+          respondError(err, res);
+        }
+
+      });
+    }
+  });
+};
+
+//Vet inte viklken funkton som skulle bort (när jag konfliktlöste) så jag avkommenterade den jag kände minst igen..
+/*exports.getThermostate = function(req, res) {
+  requiredHeaders(req, function(err, reqInfo){
+    if(err){    
+      respondError(err, res)
+    } else{
+      Bubbles.getThermostate(reqInfo, function(err, device) {
+        if (err) {
           respondError(err, res);
         }
         res.send(device);
       });
     }
   });
-};
+};*/
 
 exports.getThermostate = function(req, res) {
   console.log("getThermostate is called");
@@ -104,7 +118,7 @@ exports.getThermostate = function(req, res) {
       });
     }
   });
-};
+}
 
 //TODO: this is the old getThermostate function. I saved it because i'm unsure...
 /*

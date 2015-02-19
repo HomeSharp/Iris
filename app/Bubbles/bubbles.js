@@ -94,16 +94,16 @@ exports.getRainGauge = function(req, callback){
 exports.getThermostate = function(req, callback){
   var callBubble;
 
-  if(callBubble = getBrandBubble(req,callback)){
+  callBubble = getBrandBubble(req, callback);
 
-    callBubble.getThermostate(req.reqInfo, function(error, Thermostate){
-
-      if(error !== null){
-        callback(error);
+  if(callBubble){
+    callBubble.getThermostate(req.reqInfo, function(err, Thermostate){
+      if(err){
+        callback(err);
       }else if(Thermostate === undefined) {
         callback(new HTTPError(404, "Thermostate not found"));
       }else{
-        callback(null,Thermostate);
+        callback(null, Thermostate);
       }
 
     });
@@ -171,7 +171,9 @@ exports.getIndoorModule = function(req, callback){
 
         });
 
+
       }
     });
   }
 };
+
