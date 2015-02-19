@@ -1,0 +1,27 @@
+﻿Merge branch 'Iris-getWeatherStation'
+
+Conflicts:
+	app/Bubbles/NetatmoBubble/NetatmoBubble.js
+	app/Bubbles/bubbles.js
+	app/controllers/device.js
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   app.js
+#	modified:   app/Bubbles/NetatmoBubble/NetatmoBubble.js
+#	modified:   app/Bubbles/bubbles.js
+#	modified:   app/controllers/device.js
+#
+

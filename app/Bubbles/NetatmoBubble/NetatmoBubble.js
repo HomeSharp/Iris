@@ -170,7 +170,29 @@ exports.getModule = function(req, callback) {
   })
 };
 
-exports.getIndoorModule = function(req, callback) {
+exports.getWeatherStation = function(req, callback){
+
+    var scale = "max";
+    var dateEnd = "last";
+    var type = "Temperature,CO2,Humidity,Pressure,Noise";
+
+    var options = {
+        host: 'api.netatmo.net',
+        path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    };
+    console.log(req.deviceId);
+    netatmoRequest(options, function(err, answer){
+        if(err) {
+            callback(err);
+        }
+        else {
+            callback(null, answer);
+        }
+    });
+}
+//TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.
+/*exports.getRainGauge = function(req, callback) {
+
   var scale = "max";
   var dateEnd = "last";
   var type = "Temperature,CO2,Humidity";

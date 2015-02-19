@@ -170,10 +170,26 @@ exports.getIndoorModule = function(req, callback){
           }
 
         });
+    }
+};
 
+exports.getWeatherStation = function(req, callback){
+    var callBubble;
 
-      }
-    });
-  }
+    if(callBubble = getBrandBubble(req,callback)){
+
+        callBubble.getWeatherStation(req.reqInfo, function(error, weatherStation){
+
+            if(error !== null){
+
+                callback(error);
+            }else if(weatherStation === undefined) {
+                callback(new HTTPError(404, "weatherStation not found"));
+            }else{
+                callback(null,weatherStation);
+            }
+
+        });
+    }
 };
 

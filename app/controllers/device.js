@@ -98,6 +98,26 @@ exports.getRainGauge = function(req, res) {
   });
 };*/
 
+exports.getWeatherStation = function(req, res) {
+    console.log("getWeatherStation is called");
+    console.log(req);
+  requiredHeaders(req, function(error, reqInfo) {
+    if(error) {
+      respondError(error, res);
+    } else {
+      Bubbles.getWeatherStation(reqInfo ,function(error, device) {
+        if(error) {
+            respondError(error, res);
+        }else{
+            res.send(device);
+        }
+
+      });
+    }
+  });
+};
+//TODO: this is the old getThermostate function. I saved it because i'm unsure...
+/*
 exports.getThermostate = function(req, res) {
   console.log("getThermostate is called");
   // ger info till Bubbles om:
