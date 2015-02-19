@@ -82,6 +82,21 @@ exports.getRainGauge = function(req, res) {
   });
 };
 
+exports.getThermostate = function(req, res) {
+  requiredHeaders(req, function(err, reqInfo){
+    if(err){
+      respondError(err, res)
+    } else{
+      Bubbles.getThermostate(reqInfo, function(err, device) {
+        if (err) {
+          respondError(err, res);
+        }
+        res.send(device);
+      });
+    }
+  });
+};
+
 //Vet inte viklken funkton som skulle bort (när jag konfliktlöste) så jag avkommenterade den jag kände minst igen..
 /*exports.getThermostate = function(req, res) {
   requiredHeaders(req, function(err, reqInfo){

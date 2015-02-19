@@ -24,6 +24,7 @@ router.route('/User/Devices')
     .post(userCtrl.postDevice)
     .get(userCtrl.getDevices);
 
+
 // Endpoint WeatherStation
 router.route('/Device/WeatherStation')
   .get(deviceCtrl.getWeatherStation);
@@ -46,6 +47,7 @@ router.route('/Device/IndoorModule')
 
 router.route('/Device/Thermostate')
   .get(deviceCtrl.getThermostate);
+
 
 // Endpoint device lamp
 //router.route('/Device/Lamp')
