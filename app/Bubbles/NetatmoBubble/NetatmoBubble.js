@@ -199,7 +199,7 @@ exports.getWeatherStation = function(req, callback){
 
     var options = {
         host: 'api.netatmo.net',
-        path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+        path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
     };
     console.log(req.deviceId);
     netatmoRequest(options, function(err, answer){
