@@ -170,7 +170,9 @@ exports.getIndoorModule = function(req, callback){
           }
 
         });
-    }
+      }
+    });
+  }
 };
 
 exports.getWeatherStation = function(req, callback){
