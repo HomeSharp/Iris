@@ -32,6 +32,10 @@ router.route('/Device/Module')
 router.route('/Device/RainGauge')
   .get(deviceCtrl.getRainGauge);
 
+// Endpoint device IndoorModule
+router.route('/Device/IndoorModule')
+    .get(deviceCtrl.getIndoorModule);
+
 // Endpoint device thermometer
 router.route('/Device/Thermostate')
   .get(deviceCtrl.getThermostate);

@@ -167,8 +167,7 @@ exports.getModule = function(req, callback) {
     else {
       callback(null, info);
     }
-  });
-
+  })
 };
 
 //TODO:This function is, as of the moment, replaced. We need to check which is the better solution, this or the other.

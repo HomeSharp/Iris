@@ -42,6 +42,19 @@ exports.getModule = function(req, res) {
 
 };
 
+exports.getIndoorModule = function(req, res){
+    console.log("getIndoorModule is called");
+
+    requiredHeaders(req, function(error, reqInfo){
+        if(error !== null){
+           respondError(error, res);
+        }else{
+            Bubbles.getIndoorModule(reqInfo);
+        }
+    });
+
+};
+
 exports.getRainGauge = function(req, res) {
     console.log("getRainGauge is called");
   // ger info till Bubbles om:
