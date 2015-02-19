@@ -25,15 +25,21 @@ exports.getModule = function(req, res) {
 
   // förväntar sig att få tillbaka en modul
 
-  var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
+  //var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
+    requiredHeaders(req, function(error, reqInfo){
 
-  Bubbles.getModule(reqInfo ,function(err, device) {
-    if(err) {
-      console.log(err);
-      res.send({ Error: "There was a problem getting the module"});
-    }
-    res.send(device);
-  });
+        if(error !== null){
+            respondError(error, res)
+        }else{
+            Bubbles.getModule(reqInfo, function(err, device) {
+                if (err !== null) {
+                    respondError(err, res);
+                }
+                res.send(device);
+            });
+        }
+    });
+
 };
 
 exports.getRainGauge = function(req, res) {
