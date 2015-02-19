@@ -3,19 +3,18 @@ var HTTPError = require('node-http-error');
 
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
 function requiredHeaders(req, next){
-    if(req.headers.access_token === undefined) {
-
-        next(new HTTPError(400, "No access token present in header"));
-    } else if(req.headers.brand === undefined) {
-        next(new HTTPError(400, 'No brand present in header'));
-    } else {
-        next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } });
-    }
+  if(req.headers.access_token === undefined) {
+    next(new HTTPError(400, "No access token present in header"));
+  } else if(req.headers.brand === undefined) {
+    next(new HTTPError(400, 'No brand present in header'));
+  } else {
+    next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand, query: req.query } });
+  }
 };
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
 function respondError(err, res){
-    res.statusCode = err.status;
-    res.send({ Error: err.message });
+  res.statusCode = err.status;
+  res.send({ Error: err.message });
 };
 
 
@@ -65,25 +64,18 @@ exports.getRainGauge = function(req, res) {
 };
 
 exports.getThermostate = function(req, res) {
-    console.log("getThermostate is called");
-    // ger info till Bubbles om:
-    // 1) access_token 2) brand
-
-    // förväntar sig att få tillbaka en Thermostate
-    requiredHeaders(req, function(error, reqInfo){
-
-        if(error !== null){
-            respondError(error, res)
-        }else{
-            Bubbles.getThermostate(reqInfo, function(err, device) {
-                if (err !== null) {
-                    console.log(err);
-                    respondError(err, res);
-                }
-                res.send(device);
-            });
+  requiredHeaders(req, function(err, reqInfo){
+    if(err){    
+      respondError(err, res)
+    } else{
+      Bubbles.getThermostate(reqInfo, function(err, device) {
+        if (err) {
+          respondError(err, res);
         }
-    });
+        res.send(device);
+      });
+    }
+  });
 };
 
 //TODO: this is the old getThermostate function. I saved it because i'm unsure...

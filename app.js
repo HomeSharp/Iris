@@ -32,7 +32,7 @@ router.route('/Device/Module')
 router.route('/Device/RainGauge')
   .get(deviceCtrl.getRainGauge);
 
-// Endpoint device thermometer
+// Endpoint device Thermostate (not the same as thermometer)
 router.route('/Device/Thermostate')
   .get(deviceCtrl.getThermostate);
 
