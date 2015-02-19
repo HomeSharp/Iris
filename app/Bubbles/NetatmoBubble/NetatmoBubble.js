@@ -2,7 +2,7 @@ var http = require('http');
 var HTTPError = require('node-http-error');
 
 function netatmoRequest(options, callback) {
-
+  console.log("netatmoRequest is called");
   http.get(options, function(resp){
     var str = "";
     resp.on('data', function(chunk){
@@ -10,7 +10,6 @@ function netatmoRequest(options, callback) {
     });
 
     resp.on('end', function () {
-      console.log("HEJ");
       console.log(str);
       var netResponse = JSON.parse(str);
       console.log("FUNKA");
@@ -178,7 +177,7 @@ exports.getIndoorModule = function(req, callback) {
 
   var options = {
     host: 'api.netatmo.net',
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&module_id=" + req.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId + "&module_id=" + req.query.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
   netatmoRequest(options, function(err, info){

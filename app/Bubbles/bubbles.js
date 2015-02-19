@@ -13,7 +13,7 @@ function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
   return callBubble;
 }
 function requierdParams(paramsToCheckForArr, req, callback){
-  var flag = false;
+  var flag = false; // This flag prevent a bug... (callback was calling twice...)
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
       callback(new HTTPError(400, "query not found"));
@@ -154,11 +154,10 @@ exports.getIndoorModule = function(req, callback){
     requierdParams(["deviceId", "moduleId"], req, function(error){ //Checks for valid parameters
 
       if (error !== null) {
-        console.log("Oglitig parameter");
+        console.log("invalid or missing parameter");
         callback(error);
       }else{
-        console.log("Giltig parameter");
-        console.log("här");
+        console.log("OK parameter");
         callBubble.getIndoorModule(req.reqInfo, function (error, IndoorModule) {
 
           if (error !== null) {
