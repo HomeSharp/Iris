@@ -176,10 +176,9 @@ exports.getIndoorModule = function(req, callback) {
   var type = "Temperature,CO2,Humidity";
   console.log(req);
 
-  req = req.reqInfo;
   var options = {
     host: 'api.netatmo.net',
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceID + "&module_id=" + req.moduleID + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId + "&module_id=" + req.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
   netatmoRequest(options, function(err, info){
