@@ -8,7 +8,7 @@ Home Sharp API (Code Name: Iris) 
 
 ## Tests
 1. run "npm install mocha -g"
-2. Set the "access"-variable to a valid access_token in Netatmo.test.js file
+2. Set the "access"-variable to a valid access_token in the test files
 3. Start server as described above
 4. In second console go to /Iris/app/Tests/Netatmo
 5. run "mocha Devicelist.test.js"
