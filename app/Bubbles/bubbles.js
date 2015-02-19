@@ -13,12 +13,18 @@ function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
   return callBubble;
 }
 function requierdParams(paramsToCheckForArr, req, callback){
+  var flag = false;
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
       callback(new HTTPError(400, "query not found"));
+      flag = true;
+      break;
     }
   }
-  callback(null);
+  if(flag === false){
+    callback(null);
+  }
+
 }
 
 exports.getDevices = function(req, callback) {
@@ -143,26 +149,30 @@ exports.getModule = function(req, callback){
 exports.getIndoorModule = function(req, callback){
   var callBubble;
 
-  if(callBubble = getBrandBubble(req,callback)){
+  if(callBubble = getBrandBubble(req,callback)) {
 
     requierdParams(["deviceId", "moduleId"], req, function(error){ //Checks for valid parameters
 
-      if(error !== null){
+      if (error !== null) {
+        console.log("Oglitig parameter");
         callback(error);
       }else{
-        callBubble.getIndoorModule(req.reqInfo, function(error, IndoorModule){
+        console.log("Giltig parameter");
+        console.log("här");
+        callBubble.getIndoorModule(req.reqInfo, function (error, IndoorModule) {
 
-          if(error !== null){
+          if (error !== null) {
 
             callback(error);
-          }else if(module === undefined) {
+          } else if (IndoorModule === undefined) {
             callback(new HTTPError(404, "IndoorModule not found"));
-          }else{
-            callback(null,IndoorModule);
+          } else {
+            callback(null, IndoorModule);
           }
 
         });
+
       }
-    })
+    });
   }
 };
