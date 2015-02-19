@@ -24,6 +24,10 @@ router.route('/User/Devices')
     .post(userCtrl.postDevice)
     .get(userCtrl.getDevices);
 
+// Endpoint WeatherStation
+router.route('/Device/WeatherStation')
+  .get(deviceCtrl.getWeatherStation);
+
 // Endpoint module
 router.route('/Device/Module')
   .get(deviceCtrl.getModule);

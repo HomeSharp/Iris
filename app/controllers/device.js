@@ -9,7 +9,7 @@ function requiredHeaders(req, next){
     } else if(req.headers.brand === undefined) {
         next(new HTTPError(400, 'No brand present in header'));
     } else {
-        next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } });
+        next(null, { reqInfo: { token: req.headers.access_token, brand: req.headers.brand, query : req.query} });
     }
 };
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
@@ -86,6 +86,24 @@ exports.getThermostate = function(req, res) {
     });
 };
 
+exports.getWeatherStation = function(req, res) {
+    console.log("getWeatherStation is called");
+    console.log(req);
+  requiredHeaders(req, function(error, reqInfo) {
+    if(error) {
+      respondError(error, res);
+    } else {
+      Bubbles.getWeatherStation(reqInfo ,function(error, device) {
+        if(error) {
+            respondError(error, res);
+        }else{
+            res.send(device);
+        }
+
+      });
+    }
+  });
+};
 //TODO: this is the old getThermostate function. I saved it because i'm unsure...
 /*
 exports.getThermostate = function(req, res) {
