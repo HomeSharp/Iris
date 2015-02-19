@@ -49,7 +49,13 @@ exports.getIndoorModule = function(req, res){
         if(error !== null){
            respondError(error, res);
         }else{
-            Bubbles.getIndoorModule(reqInfo);
+            Bubbles.getIndoorModule(reqInfo, function(error, IndoorModule){
+                if(error !== null){
+                    respondError(error, res);
+                }else{
+                    res.send(IndoorModule);
+                }
+            });
         }
     });
 

@@ -131,3 +131,23 @@ exports.getModule = function(req, callback){
         });
     }
 };
+
+exports.getIndoorModule = function(req, callback){
+    var callBubble;
+
+    if(callBubble = getBrandBubble(req,callback)){
+
+        callBubble.getIndoorModule(req.reqInfo, function(error, IndoorModule){
+
+            if(error !== null){
+
+                callback(error);
+            }else if(module === undefined) {
+                callback(new HTTPError(404, "IndoorModule not found"));
+            }else{
+                callback(null,IndoorModule);
+            }
+
+        });
+    }
+};
