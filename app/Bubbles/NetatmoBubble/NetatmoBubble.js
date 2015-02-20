@@ -46,10 +46,11 @@ exports.getRainGauge = function(req, callback){
 
   var options = {
     host: 'api.netatmo.net',//+ req.deviceId
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=05:00:00:00:5e:e8"  + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId +"&module_id=" + req.query.moduleId  + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
   netatmoRequest(options, function(err, answer){
+
     if(err) {
       callback(err);
     }
@@ -58,6 +59,7 @@ exports.getRainGauge = function(req, callback){
     }
   });
 };
+
 exports.getThermostate = function(req, callback){
 
   var deviceId = req.query.deviceId;

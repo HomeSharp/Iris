@@ -75,6 +75,8 @@ exports.getRainGauge = function(req, res) {
       Bubbles.getRainGauge(reqInfo, function (err, device) {
         if (err !== null) {
           respondError(err, res);
+        }else{
+          res.send(device);
         }
 
       });
@@ -83,6 +85,7 @@ exports.getRainGauge = function(req, res) {
 };
 
 exports.getThermostate = function(req, res) {
+  console.log("getThermostate is called");
   requiredHeaders(req, function(err, reqInfo){
     if(err){
       respondError(err, res)

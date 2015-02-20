@@ -16,7 +16,8 @@ function requierdParams(paramsToCheckForArr, req, callback){
   var flag = false; // This flag prevent a bug... (callback was calling twice...)
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
-      callback(new HTTPError(400, "query not found"));
+      console.log(paramsToCheckForArr[i]);
+      callback(new HTTPError(400, "query "+paramsToCheckForArr[i]+" is missing"));
       flag = true;
       break;
     }
@@ -74,19 +75,25 @@ exports.getRainGauge = function(req, callback){
   var callBubble;
 
   if(callBubble = getBrandBubble(req,callback)){
+    requierdParams(["deviceId", "moduleId"],req, function(error) {
 
-    callBubble.getRainGauge(req.reqInfo, function(error, RainGauge){
+    if (error !== null) {
+      callback(error);
+    } else {
+      callBubble.getRainGauge(req.reqInfo, function (error, RainGauge) {
 
-      if(error !== null){
+        if (error !== null) {
 
-        callback(error);
-      }else if(RainGauge === undefined) {
-        callback(new HTTPError(404, "RainGauge not found"));
-      }else{
-        callback(null,RainGauge);
-      }
+          callback(error);
+        } else if (RainGauge === undefined) {
+          callback(new HTTPError(404, "RainGauge not found"));
+        } else {
+          callback(null, RainGauge);
+        }
 
-    });
+      });
+    }
+  });
   }
 };
 
