@@ -1,5 +1,22 @@
 exports.getDevices = function(req, callback) {
-    TEST
+    
+    var TelldusAPI = require('telldus-live');
+    var secrets = require('secrets');
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
   callback(null, "not yet implemented");
 };
 
