@@ -19,42 +19,29 @@ exports.getDevices = function (req, callback) {
         publicKey  : publicKey, 
         privateKey : privateKey
     }).login(token, tokenSecret, function (err, user) {
-        if (!!err) return console.log('login error: ' + err.message);
-        
+        if (!!err) return console.log('login error: ' + err.message);       
         
         //Användaren
         console.log('user: '); console.log(user);
 
-
     }).on('error', function (err) {
         console.log('background error: ' + err.message);
-    });
-    
-    
-    
+    });  
     
     //HÄR hämtas alla devices - i en array
     cloud.getDevices(function (err, devices) {
         
         //Skriver ut arrayrn i konsolen
         console.log(devices);
-      
-  
 
     }).on('error', function (err) {
         console.log('background error: ' + err.message);
     });
-    
-    
-    
-    
-    
-    
-    
-    
 
   callback(null, "not yet implemented");
 };
+
+
 
 exports.getUser = function(req, callback){
 
