@@ -33,6 +33,18 @@ exports.getDevices = function (req, callback) {
     
     
     
+    //HÄR hämtas alla devices - i en array
+    cloud.getDevices(function (err, devices) {
+        
+        //Skriver ut arrayrn i konsolen
+        console.log(devices);
+      
+  
+
+    }).on('error', function (err) {
+        console.log('background error: ' + err.message);
+    });
+    
     
     
     
