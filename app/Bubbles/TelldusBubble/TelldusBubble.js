@@ -14,6 +14,21 @@ exports.getDevices = function (req, callback) {
   , cloud
     ;
     
+    //Loggar in och fixar och trixar
+    cloud = new TelldusAPI.TelldusAPI({
+        publicKey  : publicKey, 
+        privateKey : privateKey
+    }).login(token, tokenSecret, function (err, user) {
+        if (!!err) return console.log('login error: ' + err.message);
+        
+        
+        //Användaren
+        console.log('user: '); console.log(user);
+
+
+    }).on('error', function (err) {
+        console.log('background error: ' + err.message);
+    });
     
     
     
