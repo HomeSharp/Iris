@@ -15,5 +15,3 @@ Home Sharp API (Code Name: Iris) 
 6. run "mocha Thermostate.test.js"
 7. run "mocha WeatherStation.test.js"
 8. run "mocha RainGauge.test.js"
-
-test
