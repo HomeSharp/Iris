@@ -21,3 +21,4 @@ Home Sharp API (Code Name: Iris)  is the heart of HomeSharp, handling the requ
 6. run "mocha Thermostate.test.js"
 7. run "mocha WeatherStation.test.js"
 8. run "mocha RainGauge.test.js"
+9. run "mocha User.test.js"
