@@ -13,6 +13,7 @@ function requiredHeaders(req, next){
 };
 //This is not so DRY... Rather have this code somewhere that both device.js and user.js can get it...
 function respondError(err, res){
+  console.log("Error: " + err.message);
   res.statusCode = err.status;
   res.send({ Error: err.message });
 };

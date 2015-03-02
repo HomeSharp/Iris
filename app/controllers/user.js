@@ -14,6 +14,7 @@ function requiredHeaders(req, next){
 };
 
 function respondError(err, res){
+  console.log("Error: " + err.message);
   res.statusCode = err.status;
   res.send({ Error: err.message });
 };
@@ -41,11 +42,10 @@ exports.getUser = function(req, res) {
 
 exports.getDevices = function(req, res) {
     //console.log(req);
-  console.log("getDevices is called")
+  console.log("getDevices is called");
 
   requiredHeaders(req, function(err, reqInfo) {
     if(err) {
-
       respondError(err, res);
     } else {
 
