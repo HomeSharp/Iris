@@ -1,12 +1,12 @@
 
 
-//req skulle innehÂlla alla keys.
+//req skulle inneh√•lla alla keys.
 exports.getDevices = function (req, callback) {
     
     var TelldusAPI = require('telldus-live');
     var secrets = require('secrets');
     
-    //Nycklar hÂrdkodat in h‰r
+    //Nycklar h√•rdkodat in h√§r
     var publicKey = secrets.publicKey?secrets.publicKey:'FEHUVEW84RAFR5SP22RABURUPHAFRUNU'
   , privateKey = secrets.privateKey?secrets.privateKey:'ZUXEVEGA9USTAZEWRETHAQUBUR69U6EF'
   , token = secrets.token?secrets.token:'cc2fde2d62d296cfefc1d3973323b595052331799'
@@ -21,14 +21,14 @@ exports.getDevices = function (req, callback) {
     }).login(token, tokenSecret, function (err, user) {
         if (!!err) return console.log('login error: ' + err.message);       
         
-        //Anv‰ndaren
+        //Anv√§ndaren
         console.log('user: '); console.log(user);
 
     }).on('error', function (err) {
         console.log('background error: ' + err.message);
     });  
     
-    //HƒR h‰mtas alla devices - i en array
+    //H√§R h√§mtas alla devices - i en array
     cloud.getDevices(function (err, devices) {
         
         //Skriver ut arrayrn i konsolen

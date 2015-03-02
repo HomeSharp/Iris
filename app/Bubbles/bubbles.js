@@ -18,6 +18,7 @@ function requierdParams(paramsToCheckForArr, req, callback){
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
       console.log(paramsToCheckForArr[i]);
+
       callback(new HTTPError(400, "query "+paramsToCheckForArr[i]+" is missing"));
       flag = true;
       break;
