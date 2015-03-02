@@ -25,3 +25,22 @@ Conflicts:
 #	modified:   app/controllers/device.js
 #
 
+{
+"status": "ok",
+"body": [
+{
+"beg_time": 1424365913,
+"value": [
+[
+20.3,
+560,
+45,
+1017.7,
+38
+]
+]
+}
+],
+"time_exec": 0.011523008346558,
+"time_server": 1424366518
+}
