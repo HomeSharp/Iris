@@ -8,6 +8,7 @@ function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
   var callBubble = chooseBubble(req.reqInfo.brand);
   if(callBubble === undefined) {
     // Bubble not found
+    console.log("Error: " + "Brand not found"); //TODO: Borde inte vara här.. borde tas hand om i respondError()
     callback(new HTTPError(400, "Brand not found"));
   }
   return callBubble;
