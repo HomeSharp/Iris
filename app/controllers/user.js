@@ -40,11 +40,15 @@ exports.getUser = function(req, res) {
 };
 
 exports.getDevices = function(req, res) {
-    console.log(req);
+    //console.log(req);
+  console.log("getDevices is called")
+
   requiredHeaders(req, function(err, reqInfo) {
     if(err) {
+
       respondError(err, res);
     } else {
+
       Bubbles.getDevices(reqInfo ,function(err, devices) {
         if(err) {
             respondError(err, res);
