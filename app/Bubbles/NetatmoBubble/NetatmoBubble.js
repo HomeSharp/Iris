@@ -275,6 +275,7 @@ exports.getIndoorModule = function(req, callback) {
       //För varje "Measure" (tex en Measure av Temprature, C02 eller Humidity) skapas ett Measure objekt som läggs in i
       //arrayen hos responseModel.
       //Notering: Measures är samma sak som de types vi skickar in till netatmo, i detta fall "var type = "Temperature,CO2,Humidity";"
+      //Testad med: 127.0.0.1:3000/api/Device/IndoorModule?deviceId=70:ee:50:01:ed:f0&moduleId=03:00:00:00:6a:72  och rätt headers.
 
       //Loggar för testning...
       console.log(">Response from netatmo (info): "+info);        //Loggar datan vi får från Netatmo
@@ -297,10 +298,7 @@ exports.getIndoorModule = function(req, callback) {
         info.time_server
       );
 
-
-      //console.log(reModel.makeJSON())
-      //callback(null, info);
-
+      //callback(null, info); <-- the old code...
       callback(null, reModel.makeJSON());
     }
   })
