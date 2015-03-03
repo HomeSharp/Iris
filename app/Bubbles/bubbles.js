@@ -154,6 +154,8 @@ exports.getModule = function(req, callback){
     });
   }
 };
+/*"_id": "03:00:00:00:6a:72",
+  "main_device": "70:ee:50:01:ed:f0",*/
 
 exports.getIndoorModule = function(req, callback){
   var callBubble;

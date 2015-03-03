@@ -1,5 +1,7 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
+var responseModel = require("../ResponseModel");
+var measureModel = require("../MeasureModel");
 
 function netatmoRequest(options, callback) {
   console.log("netatmoRequest is called");
@@ -267,9 +269,18 @@ exports.getIndoorModule = function(req, callback) {
       callback(err);
     }
     else {
-      require("ResponseModel");
-      var reModel = ResponseModel();
-      callback(null, info);
+
+
+      oldInfo = info;
+      info = JSON.parse(info);
+      module = info;
+      console.log(oldInfo)
+      console.log(module.body[0].value[1]);
+      var reModel = new responseModel(req.query.deviceId, req.query.moduleId, "IndoorModule", "Inget som returneras kan användas",[ new measureModel("C02", module.body[0].value[0][1], "celcius")],info.time_exec, info.time_server);
+      //console.log(reModel.makeJSON())
+      //callback(null, info);
+
+      callback(null, reModel.makeJSON());
     }
   })
 };
