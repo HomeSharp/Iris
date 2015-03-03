@@ -7,6 +7,8 @@ var ResponseModel = function(deviceId, mainDevice, deviceType, moduleName, messu
         mainDevice: mainDevice,
         deviceType: deviceType,
         moduleName: moduleName,
+        //^Modulnamnen är inget som returneras när man gör
+        // (tex) en getIndoorModule <- Hur löser man det? Ska moduleName skickas med som parameter
 
         meassures: messuresArr  //An array (always array..) with MeasureModel objects.
       }

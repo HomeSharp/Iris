@@ -270,13 +270,34 @@ exports.getIndoorModule = function(req, callback) {
     }
     else {
 
+      //Vad händer?
+      //Responsen från Netatmo hämtas och den "viktiga" datan trycks in i en responseModel (hittas under app/Bubbles)
+      //För varje "Measure" (tex en Measure av Temprature, C02 eller Humidity) skapas ett Measure objekt som läggs in i
+      //arrayen hos responseModel.
+      //Notering: Measures är samma sak som de types vi skickar in till netatmo, i detta fall "var type = "Temperature,CO2,Humidity";"
 
-      oldInfo = info;
+      //Loggar för testning...
+      console.log(">Response from netatmo (info): "+info);        //Loggar datan vi får från Netatmo
       info = JSON.parse(info);
       module = info;
-      console.log(oldInfo)
-      console.log(module.body[0].value[1]);
-      var reModel = new responseModel(req.query.deviceId, req.query.moduleId, "IndoorModule", "Inget som returneras kan användas",[ new measureModel("C02", module.body[0].value[0][1], "celcius")],info.time_exec, info.time_server);
+      console.log(">Values from netatmo (Temperature,CO2,Humidity): "+module.body[0].value[0]);
+
+      //responseModell skapas med den viktiga datan för att returneras som JSON...
+      var reModel = new responseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "IndoorModule",
+        "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
+          [
+            new measureModel("C02", module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),     //TODO: insert a proper Unit!
+            new measureModel("Temperature", module.body[0].value[0][0], "celcius"),
+            new measureModel("Humidity", module.body[0].value[0][2], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+          ],
+        info.time_exec,
+        info.time_server
+      );
+
+
       //console.log(reModel.makeJSON())
       //callback(null, info);
 
