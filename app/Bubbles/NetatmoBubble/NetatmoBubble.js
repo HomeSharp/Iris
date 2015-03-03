@@ -11,7 +11,33 @@ function netatmoRequest(options, callback) {
 
     resp.on('end', function () {
 
-      var netResponse = JSON.parse(str);
+            var netResponse = JSON.parse(str);
+            
+            
+
+            //Status
+            var status = netResponse.status; //Status
+            
+            //Får ut en module
+            for (i = 0; i < netResponse.body.modules.length; ++i) {
+                
+                //En module
+                var tempJson = netResponse.body.modules[i];
+                
+                var deviceId = Json._id;
+                var mainDevice = Json.main_device;
+                var deviceType = Json.
+                
+                
+                
+
+                //alert(json["satus"]);
+                console.log(netResponse.body.modules[i]);
+                console.log("Debugger Stop");
+            }
+            
+                   
+
 
       // if netatmo returns error in JSON response
       if(netResponse.error){
@@ -33,6 +59,56 @@ function netatmoRequest(options, callback) {
     callback(new HTTTPError(401, "Got error: " + e.message));
   });
 };
+
+function GetNormalize(str) {
+    
+    var responseObj = {};
+    var modules = [];
+    
+    responseObj.modules = modules;
+    
+    //Här ska data hämtas från response från Netatmo json
+    var status = "200";
+    var deviceId = "03:00:00:00:6a:72";
+    
+    //Våran mall
+    var module = {
+        "status": status,
+        "body": {
+            "devices": [
+                {
+                    "deviceId": deviceId,
+                    "mainDevice": "70:ee:50:01:ed:f0",
+                    "deviceType": "weatherModule",
+                    "moduleName": "Sovrum",
+                    "meassures": [
+                        {
+                            "type": "Temperature",
+                            "value" : 20.8,                
+                            "unit" : "celcius"
+                        },
+                        {
+                            "type": "Humidity",
+                            "value" : 35,
+                            "unit": "some unit"
+                        },
+                        {
+                            "type": "CO2",
+                            "value" : 528,
+                            "unit": "some unit"
+                        }
+                    ]
+                }
+            ]
+        },
+        "time_exec": 0.033046960830688,
+        "time_server": 1424263797
+    };
+    
+    responseObj.modules.push(module);
+
+};
+
 
 exports.getRainGauge = function(req, callback){
   //TODO: If user has more than one RainGauge then this function need to get support for more than one RainGauge...
