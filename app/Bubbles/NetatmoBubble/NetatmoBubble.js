@@ -60,7 +60,7 @@ function netatmoRequest(options, callback) {
   });
 };
 
-function GetNormalize(str) {
+function getNormalize(str) {
     
     var responseObj = {};
     var modules = [];
