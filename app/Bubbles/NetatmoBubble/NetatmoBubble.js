@@ -1,7 +1,6 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
-var responseModel = require("../ResponseModel");
-var measureModel = require("../MeasureModel");
+var response = require("../ResponseModel");
 
 function netatmoRequest(options, callback) {
   console.log("netatmoRequest is called");
@@ -284,15 +283,15 @@ exports.getIndoorModule = function(req, callback) {
       console.log(">Values from netatmo (Temperature,CO2,Humidity): "+module.body[0].value[0]);
 
       //responseModell skapas med den viktiga datan för att returneras som JSON...
-      var reModel = new responseModel(
+      var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
         "IndoorModule",
         "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
           [
-            new measureModel("C02", module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),     //TODO: insert a proper Unit!
-            new measureModel("Temperature", module.body[0].value[0][0], "celcius"),
-            new measureModel("Humidity", module.body[0].value[0][2], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+            new response.MeasureModel("C02", module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),     //TODO: insert a proper Unit!
+            new response.MeasureModel("Temperature", module.body[0].value[0][0], "celcius"),
+            new response.MeasureModel("Humidity", module.body[0].value[0][2], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
           ],
         info.time_exec,
         info.time_server
