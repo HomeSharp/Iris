@@ -55,8 +55,9 @@ function temp() {
   }
 }
 
-function getNormalize(str) {
 
+
+function getNormalize(str) {
     var responseObj = {};
     var modules = [];
 
@@ -266,6 +267,8 @@ exports.getIndoorModule = function(req, callback) {
       callback(err);
     }
     else {
+      require("ResponseModel");
+      var reModel = ResponseModel();
       callback(null, info);
     }
   })
