@@ -11,33 +11,7 @@ function netatmoRequest(options, callback) {
 
     resp.on('end', function () {
 
-            var netResponse = JSON.parse(str);
-            
-            
-
-            //Status
-            var status = netResponse.status; //Status
-            
-            //Får ut en module
-            for (i = 0; i < netResponse.body.modules.length; ++i) {
-                
-                //En module
-                var tempJson = netResponse.body.modules[i];
-                
-                var deviceId = Json._id;
-                var mainDevice = Json.main_device;
-                var deviceType = Json.
-                
-                
-                
-
-                //alert(json["satus"]);
-                console.log(netResponse.body.modules[i]);
-                console.log("Debugger Stop");
-            }
-            
-                   
-
+      var netResponse = JSON.parse(str);
 
       // if netatmo returns error in JSON response
       if(netResponse.error){
@@ -60,17 +34,38 @@ function netatmoRequest(options, callback) {
   });
 };
 
+// should this be done in "getNormalize?"
+function temp() {
+  //Status
+  var status = netResponse.status; //Status
+
+  //Får ut en module
+  for (i = 0; i < netResponse.body.modules.length; ++i) {
+
+      //En module
+      var tempJson = netResponse.body.modules[i];
+
+      var deviceId = Json._id;
+      var mainDevice = Json.main_device;
+      var deviceType = Json.
+
+      //alert(json["satus"]);
+      console.log(netResponse.body.modules[i]);
+      console.log("Debugger Stop");
+  }
+}
+
 function getNormalize(str) {
-    
+
     var responseObj = {};
     var modules = [];
-    
+
     responseObj.modules = modules;
-    
+
     //Här ska data hämtas från response från Netatmo json
     var status = "200";
     var deviceId = "03:00:00:00:6a:72";
-    
+
     //Våran mall
     var module = {
         "status": status,
@@ -84,7 +79,7 @@ function getNormalize(str) {
                     "meassures": [
                         {
                             "type": "Temperature",
-                            "value" : 20.8,                
+                            "value" : 20.8,
                             "unit" : "celcius"
                         },
                         {
@@ -104,7 +99,7 @@ function getNormalize(str) {
         "time_exec": 0.033046960830688,
         "time_server": 1424263797
     };
-    
+
     responseObj.modules.push(module);
 
 };
@@ -118,20 +113,27 @@ exports.getRainGauge = function(req, callback){
   var scale = "max";
   var dateEnd = "last";
 
-
-
   var options = {
     host: 'api.netatmo.net',//+ req.deviceId
     path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId +"&module_id=" + req.query.moduleId  + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
-
+  // make request to Netatmo with options
   netatmoRequest(options, function(err, answer){
 
     if(err) {
       callback(err);
     }
     else {
-      callback(null, answer);
+      // if response from Netatmo is valid - make it general
+      getNormalize(answer, function(err, generalAnswer){
+        if(err)
+        {
+          callback(err);
+        }
+        else {
+          callback(null, generalAnswer);
+        }
+      })
     }
   });
 };
