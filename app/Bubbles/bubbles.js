@@ -106,16 +106,24 @@ exports.getThermostate = function(req, callback){
   callBubble = getBrandBubble(req, callback);
 
   if(callBubble){
-    callBubble.getThermostate(req.reqInfo, function(err, Thermostate){
-      if(err){
-        callback(err);
-      }else if(Thermostate === undefined) {
-        callback(new HTTPError(404, "Thermostate not found"));
-      }else{
-        callback(null, Thermostate);
-      }
+    requierdParams(["deviceId", "moduleId"],req, function(error){
 
+      if (error !== null) {
+        callback(error);
+      } else {
+        callBubble.getThermostate(req.reqInfo, function (err, Thermostate) {
+          if (err) {
+            callback(err);
+          } else if (Thermostate === undefined) {
+            callback(new HTTPError(404, "Thermostate not found"));
+          } else {
+            callback(null, Thermostate);
+          }
+
+        });
+      }
     });
+
   }
 };
 
