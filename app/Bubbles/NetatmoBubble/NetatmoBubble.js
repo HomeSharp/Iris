@@ -202,10 +202,73 @@ function Private_getDevices(req, callback){
       callback(err);
     }
     else {
-      callback(null, answer);
+
+      //Loggar för testning...
+      console.log(">Response from netatmo (info): "+answer);
+      info = JSON.parse(answer);
+      module = info;
+
+
+      var modules = private_DeviceListStripper(module.body.modules);
+      var devices = private_DeviceListStripper(module.body.devices);
+
+      var usersDeviceList = private_DeviceListFixerUpper(modules, devices);
+
+      callback(null,usersDeviceList); //answer);
     }
   });
 }
+private_DeviceListFixerUpper = function(modules, devices){
+  var usersDeviceList = {modules : null, devices : null};
+  var moduleList = [];
+  var deviceList = [];
+  for(var i = 0; i < modules.length; i++){
+    moduleList.push(modules[i].body)
+  }
+  for(var i = 0; i < devices.length; i++){
+    deviceList.push(devices[i].body)
+  }
+
+  usersDeviceList.modules = moduleList;
+  usersDeviceList.devices = deviceList;
+
+  return usersDeviceList;
+}
+
+private_DeviceListStripper = function(answer){
+  var arrWithModels = [];
+
+  for(var i = 0; i < answer.length; i++){
+
+    var modulesTypes =  answer[i].data_type;
+    var arrWithMeasureModels = [];
+    for(var j = 0; j < modulesTypes.length; j++){
+
+      var meModel = new response.MeasureModel(modulesTypes[j], answer[i].dashboard_data[modulesTypes[j]] , "GIVE ME A PROPER UNIT"); //TODO: insert a proper Unit!
+
+      arrWithMeasureModels.push(meModel);
+    }
+
+    var reModel = new response.ResponseModel(
+      answer[i]._id,
+      answer[i].main_device !== undefined ? answer[i].main_device : null,  // Om Main_device inte finns så blir den null
+      answer[i].type,       //TODO: känns denna rätt? Vi får rätt konstiga typer från devicelist om denna används... (typ NAModule4 etc..)
+      answer[i].module_name,
+      arrWithMeasureModels,
+      info.time_exec,
+      info.time_server
+    );
+
+    if(answer[i].cipher_id !== undefined){ //Om chiper_id finns så kollar vi på en "Device" och inte en modul. Då vill vi lägga undan modules på devicen också.. ?
+      reModel.body.modulesIds = answer[i].modules;
+      reModel.body.cipher_id = answer[i].cipher_id;
+      //I denna ifsats så kan vi lägga till saker som är specifika för en Device..
+    }
+
+    arrWithModels.push(reModel);
+  }
+  return arrWithModels;
+};
 
 
 exports.getDevices = function(req, callback) {
@@ -224,7 +287,7 @@ exports.getUser = function(req, callback){
     if(error !== null){
       callback(error);
     }else{
-     
+
       callback(null, answer);
     }
   });

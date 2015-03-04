@@ -1,7 +1,7 @@
 exports.ResponseModel = function(deviceId, mainDevice, deviceType, moduleName, messuresArr, time_exec, time_server){
   this.status = 200;
   this.body = {
-    devices : [
+    modules : [ // Stod devices här förut, vilket är mest rätt? Devices eller Modules?
       {
         deviceId: deviceId,
         mainDevice: mainDevice,
