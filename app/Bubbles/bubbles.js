@@ -199,7 +199,7 @@ exports.getWeatherStation = function(req, callback){
             }else if(weatherStation === undefined) {
                 callback(new HTTPError(404, "weatherStation not found"));
             }else{
-                callback(null,weatherStation);
+                callback(null, weatherStation);
             }
 
         });

@@ -239,7 +239,8 @@ exports.getModule = function(req, callback) {
 
   var options = {
     host: 'api.netatmo.net',//+ req.deviceId
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=70:ee:50:01:ed:f0" + "&module_id=03:00:00:00:6a:72" + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId  + "&module_id=" + req.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    //path: '/api/getmeasure?access_token=' + req.token + "&device_id=70:ee:50:01:ed:f0" + "&module_id=03:00:00:00:6a:72" + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
   netatmoRequest(options, function(err, info){
@@ -247,7 +248,31 @@ exports.getModule = function(req, callback) {
       callback(err);
     }
     else {
-      callback(null, info);
+      //Loggar för testning...
+      console.log(">Response from netatmo (info): "+info);
+      info = JSON.parse(info);
+      module = info;
+      console.log(">Values from netatmo (Temperature,CO2,Humidity,Pressure,Noise,Rain): "+module.body[0].value[0]);
+
+
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "Module",
+        "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
+        [
+          new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
+          new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Rain",         module.body[0].value[0][5], "GIVE ME A PROPER UNIT")  //TODO: insert a proper Unit!
+        ],
+        info.time_exec,
+        info.time_server
+      );
+
+      callback(null, reModel.makeJSON());
     }
   })
 };

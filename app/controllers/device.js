@@ -119,7 +119,7 @@ exports.getThermostate = function(req, res) {
 
 exports.getWeatherStation = function(req, res) {
     console.log("getWeatherStation is called");
-    console.log(req);
+    //console.log(req);
   requiredHeaders(req, function(error, reqInfo) {
     if(error) {
       respondError(error, res);
