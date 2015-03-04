@@ -318,7 +318,30 @@ exports.getWeatherStation = function(req, callback){
             callback(err);
         }
         else {
-            callback(null, answer);
+          //Loggar för testning...
+          console.log(">Response from netatmo (info): "+answer);
+          info = JSON.parse(answer);
+          module = info;
+          console.log(">Values from netatmo (Temperature,CO2,Humidity,Pressure,Noise): "+module.body[0].value[0]);
+
+
+          var reModel = new response.ResponseModel(
+            req.query.deviceId,
+            req.query.moduleId,
+            "WeatherStation",
+            "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
+            [
+              new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
+              new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),      //TODO: insert a proper Unit!
+              new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+              new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+              new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT")     //TODO: insert a proper Unit!
+            ],
+            info.time_exec,
+            info.time_server
+          );
+
+          callback(null, reModel.makeJSON());
         }
     });
 }
