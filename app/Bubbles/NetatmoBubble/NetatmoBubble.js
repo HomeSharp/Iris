@@ -224,6 +224,7 @@ exports.getUser = function(req, callback){
     if(error !== null){
       callback(error);
     }else{
+     
       callback(null, answer);
     }
   });
@@ -239,7 +240,7 @@ exports.getModule = function(req, callback) {
 
   var options = {
     host: 'api.netatmo.net',//+ req.deviceId
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.deviceId  + "&module_id=" + req.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId  + "&module_id=" + req.query.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
     //path: '/api/getmeasure?access_token=' + req.token + "&device_id=70:ee:50:01:ed:f0" + "&module_id=03:00:00:00:6a:72" + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
