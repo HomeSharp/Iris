@@ -126,16 +126,40 @@ exports.getRainGauge = function(req, callback){
       callback(err);
     }
     else {
+
       // if response from Netatmo is valid - make it general
-      getNormalize(answer, function(err, generalAnswer){
+      /*getNormalize(answer, function(err, generalAnswer){
+
         if(err)
         {
           callback(err);
         }
-        else {
-          callback(null, generalAnswer);
-        }
-      })
+        else {*/
+
+          //Loggar för testning...
+          console.log(">Response from netatmo (info): "+answer);
+          info = JSON.parse(answer);
+          module = info;
+          console.log(">Values from netatmo (Rain): "+module.body[0].value[0]);
+
+
+          var reModel = new response.ResponseModel(
+            req.query.deviceId,
+            req.query.moduleId,
+            "Module",
+            "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
+            [
+              new response.MeasureModel("Rain",  module.body[0].value[0][0], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+            ],
+            info.time_exec,
+            info.time_server
+          );
+
+          //callback(null, reModel.makeJSON());
+
+          callback(null, reModel.makeJSON());
+        /*}*/
+      /*})*/
     }
   });
 };
@@ -159,29 +183,10 @@ exports.getThermostate = function(req, callback){
       callback(err);
     }
     else {
-      //Loggar för testning...
-      console.log(">Response from netatmo (info): "+info);
-      info = JSON.parse(info);
-      module = info;
-      console.log(">Values from netatmo (Temperature,CO2,Humidity,Pressure,Noise,Rain): "+module.body[0].value[0]);
 
+      //TODO: getThermostate funktionen ska returnera med responseModellen, probleemet är att v iinte har någon
+      // thermostat att testa på. Därför implementeras ej rätt returdata för denna funktion tills vidare.
 
-      var reModel = new response.ResponseModel(
-        req.query.deviceId,
-        req.query.moduleId,
-        "Module",
-        "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
-        [
-          new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
-          new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Rain",         module.body[0].value[0][5], "GIVE ME A PROPER UNIT")  //TODO: insert a proper Unit!
-        ],
-        info.time_exec,
-        info.time_server
-      );
 
       callback(null, info);
     }
