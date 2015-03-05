@@ -22,9 +22,7 @@ function telldusOauthRequest(options, callback) {
     function(err, data, res){
 
       console.log("2. data");
-      console.log(data);
-      console.log("3. res");
-      console.log(res);
+      console.log(data);      
     }
   )
 };
