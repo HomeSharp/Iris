@@ -32,7 +32,7 @@ function requierdParams(paramsToCheckForArr, req, callback){
 
 exports.getDevices = function(req, callback) {
   var callBubble;
-  // 1 choose proper bubble
+  // 1 choose proper bubble  
 
   if(callBubble = getBrandBubble(req, callback)) { // Hämtning av callBubble är utbruten...
 
@@ -40,7 +40,6 @@ exports.getDevices = function(req, callback) {
     callBubble.getDevices(req.reqInfo , function(err, devices) {
       if(err){
         // a Bubble plugin error occured
-
         callback(err);
       }
       else if(devices === undefined) {
@@ -205,4 +204,3 @@ exports.getWeatherStation = function(req, callback){
         });
     }
 };
-

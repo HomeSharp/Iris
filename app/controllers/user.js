@@ -41,24 +41,44 @@ exports.getUser = function(req, res) {
 };
 
 exports.getDevices = function(req, res) {
-    //console.log(req);
+
   console.log("getDevices is called");
 
-  requiredHeaders(req, function(err, reqInfo) {
+  var reqInfo = {
+    reqInfo: {
+      token: req.headers.access_token,
+      brand: req.headers.brand,
+      tokenSecret: req.headers.tokensecret,
+      publicKey: req.headers.publickey,
+      privateKey: req.headers.privatekey
+    }
+  }
+
+  Bubbles.getDevices(reqInfo, function(err, devices) {
     if(err) {
       respondError(err, res);
     } else {
-
-      Bubbles.getDevices(reqInfo ,function(err, devices) {
-        if(err) {
-            respondError(err, res);
-        }else{
-            res.send(devices);
-        }
-
-      });
+      res.send(devices);
     }
   });
+
+  // Testing purposes
+
+  // requiredHeaders(req, function(err, reqInfo) {
+  //   if(err) {
+  //     respondError(err, res);
+  //   } else {
+  //
+  //     Bubbles.getDevices(reqInfo ,function(err, devices) {
+  //       if(err) {
+  //           respondError(err, res);
+  //       }else{
+  //           res.send(devices);
+  //       }
+  //
+  //     });
+  //   }
+  // });
 };
 
 exports.postDevice = function(req, res) {
