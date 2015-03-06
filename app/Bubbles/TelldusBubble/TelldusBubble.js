@@ -22,7 +22,15 @@ function telldusOauthRequest(options, callback) {
     function(err, data, res){
 
       console.log("2. data");
-      console.log(data);      
+      console.log(data);
+
+      if(err){
+        callback(new HTTPError(401, "Got error: " + JSON.parse(data).error)); //Dunno if the statuscode is right...
+      }else{
+        callback(null,data)
+      }
+
+
     }
   )
 };
@@ -33,11 +41,16 @@ exports.getDevices = function (req, callback) {
     host: 'http://api.telldus.com/json',
     path: '/devices/list?',
     queryMethods: 1,
-    publicKey: req.publicKey,
-    privateKey: req.privateKey,
-    token: req.token,
-    tokenSecret: req.tokenSecret
+    publicKey:    req.publicKey,
+    privateKey:   req.privateKey,
+    token:        req.token,
+    tokenSecret:  req.tokenSecret
   };
+
+  console.log(req.publicKey)
+  console.log(req.privateKey)
+  console.log(req.token)
+  console.log(req.tokenSecret)
 
   telldusOauthRequest(options, function(err, answer){
     if(err) {
