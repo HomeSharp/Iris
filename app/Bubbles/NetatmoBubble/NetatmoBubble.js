@@ -155,8 +155,6 @@ exports.getRainGauge = function(req, callback){
             info.time_server
           );
 
-          //callback(null, reModel.makeJSON());
-
           callback(null, reModel.makeJSON());
         /*}*/
       /*})*/
@@ -184,11 +182,35 @@ exports.getThermostate = function(req, callback){
     }
     else {
 
-      //TODO: getThermostate funktionen ska returnera med responseModellen, probleemet är att v iinte har någon
-      // thermostat att testa på. Därför implementeras ej rätt returdata för denna funktion tills vidare.
+      //OBS denna är ej testad då det ej finns någon thermostat att testa på.
+      //Detta är hur jag antar att den fungerar, just nu ger den temperatur och en variabel som heter "Time"
+      // Measured (typ some seconds eller thermostate) : It contains the last measurements of the Thermostat
+      //Loggar för testning...
+      console.log(">Response from netatmo (info): "+info);
+      info = JSON.parse(info);
+      module = info;
+      console.log(">Values from netatmo (Rain): "+module.body[0].value[0]);
 
 
-      callback(null, info);
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "Thermostate",
+        "Nothing of what's returned can be used",
+        [
+          new response.MeasureModel("Temperature",  module.body.measured.temperature, "celcius"), //temprature of last measurement
+          new response.MeasureModel("Time",  module.body.measured.time, "seconds")      //Time of the measurement
+        ],
+        info.time_exec,
+        info.time_server
+      );
+
+      //callback(null, reModel.makeJSON());
+
+      callback(null, reModel.makeJSON());
+
+
+      //callback(null, info);
     }
   });
 };
