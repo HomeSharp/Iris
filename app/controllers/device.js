@@ -20,10 +20,10 @@ function respondError(err, res){
 
 
 exports.getModule = function(req, res) {
-  // ger info till Bubbles om:
+  // give info to Bubbles if:
   // 1) access_token 2) brand
 
-  // förväntar sig att få tillbaka en modul
+  // expects to get a module...
 
   //var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
   requiredHeaders(req, function(error, reqInfo){
@@ -63,10 +63,10 @@ exports.getIndoorModule = function(req, res){
 
 exports.getRainGauge = function(req, res) {
   console.log("getRainGauge is called");
-  // ger info till Bubbles om:
+  // give info to Bubbles if:
   // 1) access_token 2) brand
 
-  // förväntar sig att få tillbaka en RainGauge
+  // expects to get a RainGauge...
 
   requiredHeaders(req, function(error, reqInfo) {
 
@@ -101,21 +101,6 @@ exports.getThermostate = function(req, res) {
   });
 };
 
-//Vet inte viklken funkton som skulle bort (när jag konfliktlöste) så jag avkommenterade den jag kände minst igen..
-/*exports.getThermostate = function(req, res) {
-  requiredHeaders(req, function(err, reqInfo){
-    if(err){    
-      respondError(err, res)
-    } else{
-      Bubbles.getThermostate(reqInfo, function(err, device) {
-        if (err) {
-          respondError(err, res);
-        }
-        res.send(device);
-      });
-    }
-  });
-};*/
 
 exports.getWeatherStation = function(req, res) {
     console.log("getWeatherStation is called");
@@ -135,45 +120,3 @@ exports.getWeatherStation = function(req, res) {
     }
   });
 };
-//TODO: this is the old getThermostate function. I saved it because i'm unsure...
-/*
-exports.getThermostate = function(req, res) {
-  console.log("getThermostate is called");
-  // ger info till Bubbles om:
-  // 1) access_token 2) brand
-
-  // förväntar sig att få tillbaka en Thermostate
-  requiredHeaders(req, function(error, reqInfo){
-
-    if(error !== null){
-      respondError(error, res)
-    }else{
-      Bubbles.getThermostate(reqInfo, function(err, device) {
-        if (err !== null) {
-          console.log(err);
-          respondError(err, res);
-        }
-        res.send(device);
-      });
-    }
-  });
-}
-
-//TODO: this is the old getThermostate function. I saved it because i'm unsure...
-/*
- exports.getThermostate = function(req, res) {
- // ger info till Bubbles om:
- // 1) access_token 2) brand
-
- // förväntar sig att få tillbaka en Thermostate
-
- var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
-
- Bubbles.getThermostate(reqInfo ,function(err, device) {
- if(err) {
- console.log(err);
- res.send({ Error: "There was a problem getting the thermostate"});
- }
- res.send(device);
- });
- };*/

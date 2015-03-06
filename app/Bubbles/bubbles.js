@@ -3,7 +3,7 @@ var TelldusBubble = require('./TelldusBubble/TelldusBubble');
 
 var HTTPError = require('node-http-error');
 
-function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
+function getBrandBubble(req, callback){
   // 1 choose proper bubble
   var callBubble = chooseBubble(req.reqInfo.brand);
   if(callBubble === undefined) {
@@ -34,7 +34,7 @@ exports.getDevices = function(req, callback) {
   var callBubble;
   // 1 choose proper bubble
 
-  if(callBubble = getBrandBubble(req, callback)) { // Hämtning av callBubble är utbruten...
+  if(callBubble = getBrandBubble(req, callback)) {
 
     // 2 call that bubble
     callBubble.getDevices(req.reqInfo , function(err, devices) {
