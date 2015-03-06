@@ -1,12 +1,12 @@
 
 
-//req skulle innehålla alla keys.
+//req should contain all the keys.
 exports.getDevices = function (req, callback) {
     
     var TelldusAPI = require('telldus-live');
     var secrets = require('secrets');
     
-    //Nycklar hårdkodat in här
+    //keys are hardcoded here
     var publicKey = secrets.publicKey?secrets.publicKey: 'xxx'
   , privateKey = secrets.privateKey?secrets.privateKey:'xxx'
   , token = secrets.token?secrets.token:'xxx'
@@ -14,24 +14,24 @@ exports.getDevices = function (req, callback) {
   , cloud
     ;
     
-    //Loggar in och fixar och trixar
+    //Logging, fixing and trixing
     cloud = new TelldusAPI.TelldusAPI({
         publicKey  : publicKey, 
         privateKey : privateKey
     }).login(token, tokenSecret, function (err, user) {
         if (!!err) return console.log('login error: ' + err.message);       
         
-        //Användaren
+        //The user
         console.log('user: '); console.log(user);
 
     }).on('error', function (err) {
         console.log('background error: ' + err.message);
     });  
     
-    //HäR hämtas alla devices - i en array
+    //All devices are collected into an array
     cloud.getDevices(function (err, devices) {
         
-        //Skriver ut arrayrn i konsolen
+        //Loggs the array
         console.log(devices);
 
     }).on('error', function (err) {
