@@ -1,7 +1,6 @@
-exports.UserResponseModel = function(userId,brand,email){
+exports.UserResponseModel = function(brand,email,time_exec,time_server){
   this.status = 200;
   this.body = {
-    user_id : userId,
     brand   : brand,
     email   : email
 

@@ -1,6 +1,7 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
 var response = require("../ResponseModel");
+var userResponse = require("../UserResponseModel");
 
 function netatmoRequest(options, callback) {
   console.log("netatmoRequest is called");
@@ -332,8 +333,11 @@ exports.getUser = function(req, callback){
     if(error !== null){
       callback(error);
     }else{
+      answer = JSON.parse(answer);
+      userRe = new userResponse.UserResponseModel(answer.body.mail, "Netatmo",answer.body.time_exec, answer.body.time_server);
 
-      callback(null, answer);
+
+      callback(null, userRe.makeJSON());
     }
   });
 
