@@ -25,7 +25,10 @@ function telldusOauthRequest(options, callback) {
       console.log(data);
 
       if(err){
-        callback(new HTTPError(401, "Got error: " + JSON.parse(data).error)); //Dunno if the statuscode is right...
+        error = JSON.parse(data).error
+        console.log(data)
+
+        callback(new HTTPError(401, "Got error: " + error)); //Dunno if the statuscode is right...
       }else{
         callback(null,data)
       }
