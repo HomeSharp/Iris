@@ -3,7 +3,7 @@ var TelldusBubble = require('./TelldusBubble/TelldusBubble');
 
 var HTTPError = require('node-http-error');
 
-function getBrandBubble(req, callback){ //Utbrytning av "getBrandBubble"
+function getBrandBubble(req, callback){
   // 1 choose proper bubble
   var callBubble = chooseBubble(req.reqInfo.brand);
   if(callBubble === undefined) {
@@ -34,7 +34,7 @@ exports.getDevices = function(req, callback) {
   var callBubble;
   // 1 choose proper bubble  
 
-  if(callBubble = getBrandBubble(req, callback)) { // Hämtning av callBubble är utbruten...
+  if(callBubble = getBrandBubble(req, callback)) {
 
     // 2 call that bubble
     callBubble.getDevices(req.reqInfo , function(err, devices) {
@@ -105,16 +105,24 @@ exports.getThermostate = function(req, callback){
   callBubble = getBrandBubble(req, callback);
 
   if(callBubble){
-    callBubble.getThermostate(req.reqInfo, function(err, Thermostate){
-      if(err){
-        callback(err);
-      }else if(Thermostate === undefined) {
-        callback(new HTTPError(404, "Thermostate not found"));
-      }else{
-        callback(null, Thermostate);
-      }
+    requierdParams(["deviceId", "moduleId"],req, function(error){
 
+      if (error !== null) {
+        callback(error);
+      } else {
+        callBubble.getThermostate(req.reqInfo, function (err, Thermostate) {
+          if (err) {
+            callback(err);
+          } else if (Thermostate === undefined) {
+            callback(new HTTPError(404, "Thermostate not found"));
+          } else {
+            callback(null, Thermostate);
+          }
+
+        });
+      }
     });
+
   }
 };
 
@@ -198,7 +206,7 @@ exports.getWeatherStation = function(req, callback){
             }else if(weatherStation === undefined) {
                 callback(new HTTPError(404, "weatherStation not found"));
             }else{
-                callback(null,weatherStation);
+                callback(null, weatherStation);
             }
 
         });

@@ -1,6 +1,7 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
 var response = require("../ResponseModel");
+var userResponse = require("../UserResponseModel");
 
 function netatmoRequest(options, callback) {
   console.log("netatmoRequest is called");
@@ -57,7 +58,7 @@ function temp() {
 }
 
 
-
+//this function is dead and unused
 function getNormalize(str) {
     var responseObj = {};
     var modules = [];
@@ -126,16 +127,38 @@ exports.getRainGauge = function(req, callback){
       callback(err);
     }
     else {
-      // if response from Netatmo is valid - make it general
-      getNormalize(answer, function(err, generalAnswer){
+
+      // if response from Netatmo is valid - make it general <-- old comment(?)
+      /*getNormalize(answer, function(err, generalAnswer){
+
         if(err)
         {
           callback(err);
         }
-        else {
-          callback(null, generalAnswer);
-        }
-      })
+        else {*/
+
+          //Loggs for testing...
+          console.log(">Response from netatmo (info): "+answer);
+          info = JSON.parse(answer);
+          module = info;
+          console.log(">Values from netatmo (Rain): "+module.body[0].value[0]);
+
+
+          var reModel = new response.ResponseModel(
+            req.query.deviceId,
+            req.query.moduleId,
+            "Module",
+            "Nothing that returns can be used",
+            [
+              new response.MeasureModel("Rain",  module.body[0].value[0][0], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+            ],
+            info.time_exec,
+            info.time_server
+          );
+
+          callback(null, reModel.makeJSON());
+        /*}*/
+      /*})*/
     }
   });
 };
@@ -159,7 +182,31 @@ exports.getThermostate = function(req, callback){
       callback(err);
     }
     else {
-      callback(null, info);
+
+      //OBS this function is not yet tested on a real device.
+      // Measured (typ some seconds eller thermostate) : It contains the last measurements of the Thermostat
+      //Loggs for testing...
+      console.log(">Response from netatmo (info): "+info);
+      info = JSON.parse(info);
+      module = info;
+      console.log(">Values from netatmo (Rain): "+module.body[0].value[0]);
+
+
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "Thermostate",
+        "Nothing of what's returned can be used",
+        [
+          new response.MeasureModel("Temperature",  module.body.measured.temperature, "celcius"), //temprature of last measurement
+          new response.MeasureModel("Time",  module.body.measured.time, "seconds")      //Time of the measurement
+        ],
+        info.time_exec,
+        info.time_server
+      );
+
+      callback(null, reModel.makeJSON());
+
     }
   });
 };
@@ -202,10 +249,72 @@ function Private_getDevices(req, callback){
       callback(err);
     }
     else {
-      callback(null, answer);
+
+      //Loggs for testing...
+      console.log(">Response from netatmo (info): "+answer);
+      info = JSON.parse(answer);
+      module = info;
+
+
+      var modules = private_DeviceListStripper(module.body.modules);
+      var devices = private_DeviceListStripper(module.body.devices);
+
+      var usersDeviceList = private_DeviceListFixerUpper(modules, devices);
+
+      callback(null,usersDeviceList);
     }
   });
 }
+private_DeviceListFixerUpper = function(modules, devices){
+  var usersDeviceList = {modules : null, devices : null};
+  var moduleList = [];
+  var deviceList = [];
+  for(var i = 0; i < modules.length; i++){
+    moduleList.push(modules[i].body)
+  }
+  for(var i = 0; i < devices.length; i++){
+    deviceList.push(devices[i].body)
+  }
+
+  usersDeviceList.modules = moduleList;
+  usersDeviceList.devices = deviceList;
+
+  return usersDeviceList;
+}
+
+private_DeviceListStripper = function(answer){
+  var arrWithModels = [];
+
+  for(var i = 0; i < answer.length; i++){
+
+    var modulesTypes =  answer[i].data_type;
+    var arrWithMeasureModels = [];
+    for(var j = 0; j < modulesTypes.length; j++){
+
+      var meModel = new response.MeasureModel(modulesTypes[j], answer[i].dashboard_data[modulesTypes[j]] , "GIVE ME A PROPER UNIT"); //TODO: insert a proper Unit!
+
+      arrWithMeasureModels.push(meModel);
+    }
+
+    var reModel = new response.ResponseModel(
+      answer[i]._id,
+      answer[i].main_device !== undefined ? answer[i].main_device : null,  // if Main_device doesnt exist, then use null
+      answer[i].type,       //TODO: känns denna rätt? Vi får rätt konstiga typer från devicelist om denna används... (typ NAModule4 etc..)
+      answer[i].module_name,
+      arrWithMeasureModels,
+      info.time_exec,
+      info.time_server
+    );
+
+    if(answer[i].cipher_id !== undefined){ //If chiper_id exists then we know were looking at a "Device". This allows us to add specific details to the return for device
+      reModel.body.modulesIds = answer[i].modules;
+      reModel.body.cipher_id = answer[i].cipher_id;
+    }
+
+    arrWithModels.push(reModel);
+  }
+  return arrWithModels;
+};
 
 
 exports.getDevices = function(req, callback) {
@@ -224,7 +333,11 @@ exports.getUser = function(req, callback){
     if(error !== null){
       callback(error);
     }else{
-      callback(null, answer);
+      answer = JSON.parse(answer);
+      userRe = new userResponse.UserResponseModel(answer.body.mail, "Netatmo",answer.body.time_exec, answer.body.time_server);
+
+
+      callback(null, userRe.makeJSON());
     }
   });
 
@@ -235,11 +348,11 @@ exports.getModule = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature,CO2,Humidity,Pressure,Noise,Rain"; // INTE MELLANRUM HÄR!!!
+  var type = "Temperature,CO2,Humidity,Pressure,Noise,Rain";
 
   var options = {
-    host: 'api.netatmo.net',//+ req.deviceId
-    path: '/api/getmeasure?access_token=' + req.token + "&device_id=70:ee:50:01:ed:f0" + "&module_id=03:00:00:00:6a:72" + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
+    host: 'api.netatmo.net',
+    path: '/api/getmeasure?access_token=' + req.token + "&device_id=" + req.query.deviceId  + "&module_id=" + req.query.moduleId + "&type=" + type + "&scale=" + scale + "&date_end=" + dateEnd
   };
 
   netatmoRequest(options, function(err, info){
@@ -247,7 +360,31 @@ exports.getModule = function(req, callback) {
       callback(err);
     }
     else {
-      callback(null, info);
+      //Loggs for testing...
+      console.log(">Response from netatmo (info): "+info);
+      info = JSON.parse(info);
+      module = info;
+      console.log(">Values from netatmo (Temperature,CO2,Humidity,Pressure,Noise,Rain): "+module.body[0].value[0]);
+
+
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "Module",
+        "Nothing that is returned can be used here",
+        [
+          new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
+          new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+          new response.MeasureModel("Rain",         module.body[0].value[0][5], "GIVE ME A PROPER UNIT")  //TODO: insert a proper Unit!
+        ],
+        info.time_exec,
+        info.time_server
+      );
+
+      callback(null, reModel.makeJSON());
     }
   })
 };
@@ -269,25 +406,23 @@ exports.getIndoorModule = function(req, callback) {
     }
     else {
 
-      //Vad händer?
-      //Responsen från Netatmo hämtas och den "viktiga" datan trycks in i en responseModel (hittas under app/Bubbles)
-      //För varje "Measure" (tex en Measure av Temprature, C02 eller Humidity) skapas ett Measure objekt som läggs in i
-      //arrayen hos responseModel.
-      //Notering: Measures är samma sak som de types vi skickar in till netatmo, i detta fall "var type = "Temperature,CO2,Humidity";"
-      //Testad med: 127.0.0.1:3000/api/Device/IndoorModule?deviceId=70:ee:50:01:ed:f0&moduleId=03:00:00:00:6a:72  och rätt headers.
+      //What is this?
+      //The response from Netatmo is made and we take the important data and make a ResponseModel of it.
+      //For each "Measure" (ex Measure of Temprature, C02 or Humidity) a MeasureModel is created and pushed into
+      //the array withing the ResponseModel.
+      //Note: Measure is the same as the types we send into the request to netatmo, in this case:  "var type = "Temperature,CO2,Humidity";"
 
-      //Loggar för testning...
-      console.log(">Response from netatmo (info): "+info);        //Loggar datan vi får från Netatmo
+      //Loggs for testing...
+      console.log(">Response from netatmo (info): "+info);
       info = JSON.parse(info);
       module = info;
       console.log(">Values from netatmo (Temperature,CO2,Humidity): "+module.body[0].value[0]);
 
-      //responseModell skapas med den viktiga datan för att returneras som JSON...
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
         "IndoorModule",
-        "Inget som returneras kan användas", //TODO: Hur ska vi göra med denna parameter(moduleName)? Vi får den inte i responsdatan från netatmo...
+        "Nothing that returns can be used",
           [
             new response.MeasureModel("C02", module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),     //TODO: insert a proper Unit!
             new response.MeasureModel("Temperature", module.body[0].value[0][0], "celcius"),
@@ -297,7 +432,6 @@ exports.getIndoorModule = function(req, callback) {
         info.time_server
       );
 
-      //callback(null, info); <-- the old code...
       callback(null, reModel.makeJSON());
     }
   })
@@ -318,7 +452,30 @@ exports.getWeatherStation = function(req, callback){
             callback(err);
         }
         else {
-            callback(null, answer);
+          //Loggs for testing...
+          console.log(">Response from netatmo (info): "+answer);
+          info = JSON.parse(answer);
+          module = info;
+          console.log(">Values from netatmo (Temperature,CO2,Humidity,Pressure,Noise): "+module.body[0].value[0]);
+
+
+          var reModel = new response.ResponseModel(
+            req.query.deviceId,
+            req.query.moduleId,
+            "WeatherStation",
+            "Nothing that returns can be used",
+            [
+              new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
+              new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),      //TODO: insert a proper Unit!
+              new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+              new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
+              new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT")     //TODO: insert a proper Unit!
+            ],
+            info.time_exec,
+            info.time_server
+          );
+
+          callback(null, reModel.makeJSON());
         }
     });
 }

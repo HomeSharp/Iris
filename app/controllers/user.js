@@ -4,7 +4,7 @@ var HTTPError = require('node-http-error');
 
 function requiredHeaders(req, next){
   if(req.headers.access_token === undefined) {
-      //Bara ett av problemen (om flera) kommer att visas, alltså första. <- kanske inte ett problem
+
     next(new HTTPError(400, "No access token present in header"));
   } else if(req.headers.brand === undefined) {
     next(new HTTPError(400, 'No brand present in header'));
@@ -82,8 +82,8 @@ exports.getDevices = function(req, res) {
 };
 
 exports.postDevice = function(req, res) {
-  //Data kommer in från Quarts (om jag förstår det rätt, kom in från Postman)
-  //access_token och brand
+  //Data from Quarts
+  //access_token and brand
 
   var reqInfo = { token: req.body.access_token, brand: req.body.brand };
 

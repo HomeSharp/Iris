@@ -1,16 +1,16 @@
 exports.ResponseModel = function(deviceId, mainDevice, deviceType, moduleName, messuresArr, time_exec, time_server){
   this.status = 200;
   this.body = {
-    devices : [
+    modules : [ // Should this be devices or modules?
       {
         deviceId: deviceId,
         mainDevice: mainDevice,
         deviceType: deviceType,
         moduleName: moduleName,
-        //^Modulnamnen är inget som returneras när man gör
-        // (tex) en getIndoorModule <- Hur löser man det? Ska moduleName skickas med som parameter
+        //^the modulename isn't anything that gets returned,
+        // (example) a getIndoorModule-request <- How do we solve this? Should the moduleName be sent as a parameter?
 
-        meassures: messuresArr  //An array (always array..) with MeasureModel objects.
+        meassures: messuresArr  //a array (always array..) with MeasureModel objects.
       }
     ]
   };
@@ -27,5 +27,5 @@ exports.ResponseModel = function(deviceId, mainDevice, deviceType, moduleName, m
 exports.MeasureModel = function(type, value, unit){
   this.type  = type;      //Could be(example): Temperature, Humidity, C02 or other
   this.value = value;     //Should be in number form (not string)
-  this.unit  = unit; //Unit = celcius or other?
+  this.unit  = unit;      //Unit = celcius or other?
 };
