@@ -1,6 +1,8 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
 var oauth = require('oauth')
+var response = require("../ResponseModel");
+var userResponse = require("../UserResponseModel");
 
 function telldusOauthRequest(options, callback) {
 
@@ -32,14 +34,11 @@ function telldusOauthRequest(options, callback) {
       }else{
         callback(null,data)
       }
-
-
     }
   )
 };
 
 
-//<<<<<<< HEAD
 exports.getDevices = function (req, callback) {
   var options = {
     host: 'http://api.telldus.com/json',
@@ -69,8 +68,42 @@ exports.getDevices = function (req, callback) {
 
 
 exports.getUser = function(req, callback){
+  var options = {
+    publicKey:    req.publicKey,
+    privateKey:   req.privateKey,
+    token:        req.token,
+    tokenSecret:  req.tokenSecret
+  };
 
-    callback(null, "not yet implemented");
+  var TelldusAPI = require('telldus-live');
+  //var secrets = require('secrets');
+
+  cloud = new TelldusAPI.TelldusAPI({
+    publicKey  : options.publicKey,
+    privateKey : options.privateKey
+  }).login(options.token, options.tokenSecret, function (err, user) {
+
+
+      console.log(options);
+      if (!!err){
+        console.log(err);
+        console.log('login error: ' + err.data)
+        callback(new HTTPError(401, "Got error: " + (err.data))); //Dunno if the statuscode is right...;
+        return
+      }
+
+      console.log(user);
+      answer = user;
+
+      userRe = new userResponse.UserResponseModel("Telldus", answer.email, null, null);
+
+
+      callback(null, userRe.makeJSON());
+
+    }).on('error', function (err) {
+      console.log('background error: ' + err.message);
+    });
+
 
 };
 

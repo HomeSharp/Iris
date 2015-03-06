@@ -334,7 +334,7 @@ exports.getUser = function(req, callback){
       callback(error);
     }else{
       answer = JSON.parse(answer);
-      userRe = new userResponse.UserResponseModel(answer.body.mail, "Netatmo",answer.body.time_exec, answer.body.time_server);
+      userRe = new userResponse.UserResponseModel("Netatmo", answer.body.mail ,answer.body.time_exec, answer.body.time_server);
 
 
       callback(null, userRe.makeJSON());
