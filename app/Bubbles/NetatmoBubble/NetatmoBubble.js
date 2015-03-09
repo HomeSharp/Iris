@@ -2,6 +2,15 @@ var http = require('http');
 var HTTPError = require('node-http-error');
 var response = require("../ResponseModel");
 var userResponse = require("../UserResponseModel");
+var unit = {
+ "Temperature"  : "Celsius",
+ "CO2"          : "Parts per million",
+ "Humidity"     : "Percent",
+ "Rain"         :  "Millimeter",
+ "Noise"        :  "Decibel",
+ "Pressure"     :  "Millibar"
+};
+
 
 function netatmoRequest(options, callback) {
   console.log("netatmoRequest is called");
@@ -83,7 +92,7 @@ function getNormalize(str) {
                         {
                             "type": "Temperature",
                             "value" : 20.8,
-                            "unit" : "celcius"
+                            "unit" : unit.Temperature
                         },
                         {
                             "type": "Humidity",
@@ -150,7 +159,7 @@ exports.getRainGauge = function(req, callback){
             "Module",
             "Nothing that returns can be used",
             [
-              new response.MeasureModel("Rain",  module.body[0].value[0][0], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+              new response.MeasureModel("Rain",  module.body[0].value[0][0], unit.Rain)
             ],
             info.time_exec,
             info.time_server
@@ -198,7 +207,7 @@ exports.getThermostate = function(req, callback){
         "Thermostate",
         "Nothing of what's returned can be used",
         [
-          new response.MeasureModel("Temperature",  module.body.measured.temperature, "celcius"), //temprature of last measurement
+          new response.MeasureModel("Temperature",  module.body.measured.temperature, unit.Temperature), //temprature of last measurement
           new response.MeasureModel("Time",  module.body.measured.time, "seconds")      //Time of the measurement
         ],
         info.time_exec,
@@ -282,6 +291,34 @@ private_DeviceListFixerUpper = function(modules, devices){
   return usersDeviceList;
 }
 
+
+private_getTypeUnit = function(type){
+  switch(type){
+    case "Temperature" :
+      return unit.Temperature;
+      break;
+    case "CO2" :
+      return unit.CO2;
+      break;
+    case "Humidity" :
+      return unit.Humidity;
+      break;
+    case "Rain" :
+      return unit.Rain;
+      break;
+    case "Noise" :
+      return unit.Noise;
+      break;
+    case "Pressure" :
+      return unit.Pressure;
+      break;
+    default :
+      return "Unit for " + type + " was not found...";
+      break;
+
+  }
+}
+
 private_DeviceListStripper = function(answer){
   var arrWithModels = [];
 
@@ -291,7 +328,7 @@ private_DeviceListStripper = function(answer){
     var arrWithMeasureModels = [];
     for(var j = 0; j < modulesTypes.length; j++){
 
-      var meModel = new response.MeasureModel(modulesTypes[j], answer[i].dashboard_data[modulesTypes[j]] , "GIVE ME A PROPER UNIT"); //TODO: insert a proper Unit!
+      var meModel = new response.MeasureModel(modulesTypes[j], answer[i].dashboard_data[modulesTypes[j]] , private_getTypeUnit(modulesTypes[j]));
 
       arrWithMeasureModels.push(meModel);
     }
@@ -373,12 +410,12 @@ exports.getModule = function(req, callback) {
         "Module",
         "Nothing that is returned can be used here",
         [
-          new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
-          new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-          new response.MeasureModel("Rain",         module.body[0].value[0][5], "GIVE ME A PROPER UNIT")  //TODO: insert a proper Unit!
+          new response.MeasureModel("Temperature",  module.body[0].value[0][0], unit.Temperature),
+          new response.MeasureModel("CO2",          module.body[0].value[0][1], unit.CO2),
+          new response.MeasureModel("Humidity",     module.body[0].value[0][2], unit.Humidity),
+          new response.MeasureModel("Pressure",     module.body[0].value[0][3], unit.Pressure),
+          new response.MeasureModel("Noise",        module.body[0].value[0][4], unit.Noise),
+          new response.MeasureModel("Rain",         module.body[0].value[0][5], unit.Rain)
         ],
         info.time_exec,
         info.time_server
@@ -424,9 +461,9 @@ exports.getIndoorModule = function(req, callback) {
         "IndoorModule",
         "Nothing that returns can be used",
           [
-            new response.MeasureModel("C02", module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),     //TODO: insert a proper Unit!
-            new response.MeasureModel("Temperature", module.body[0].value[0][0], "celcius"),
-            new response.MeasureModel("Humidity", module.body[0].value[0][2], "GIVE ME A PROPER UNIT") //TODO: insert a proper Unit!
+            new response.MeasureModel("C02", module.body[0].value[0][1], unit.CO2),
+            new response.MeasureModel("Temperature", module.body[0].value[0][0], unit.Temperature),
+            new response.MeasureModel("Humidity", module.body[0].value[0][2], unit.Humidity)
           ],
         info.time_exec,
         info.time_server
@@ -465,11 +502,11 @@ exports.getWeatherStation = function(req, callback){
             "WeatherStation",
             "Nothing that returns can be used",
             [
-              new response.MeasureModel("Temperature",  module.body[0].value[0][0], "celcius"),
-              new response.MeasureModel("CO2",          module.body[0].value[0][1], "GIVE ME A PROPER UNIT"),      //TODO: insert a proper Unit!
-              new response.MeasureModel("Humidity",     module.body[0].value[0][2], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-              new response.MeasureModel("Pressure",     module.body[0].value[0][3], "GIVE ME A PROPER UNIT"), //TODO: insert a proper Unit!
-              new response.MeasureModel("Noise",        module.body[0].value[0][4], "GIVE ME A PROPER UNIT")     //TODO: insert a proper Unit!
+              new response.MeasureModel("Temperature",  module.body[0].value[0][0], unit.Temperature),
+              new response.MeasureModel("CO2",          module.body[0].value[0][1], unit.CO2),
+              new response.MeasureModel("Humidity",     module.body[0].value[0][2], unit.Humidity),
+              new response.MeasureModel("Pressure",     module.body[0].value[0][3], unit.Pressure),
+              new response.MeasureModel("Noise",        module.body[0].value[0][4], unit.Noise)
             ],
             info.time_exec,
             info.time_server
