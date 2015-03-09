@@ -6,9 +6,10 @@ var unit = {
  "Temperature"  : "Celsius",
  "CO2"          : "Parts per million",
  "Humidity"     : "Percent",
- "Rain"         :  "Millimeter",
- "Noise"        :  "Decibel",
- "Pressure"     :  "Millibar"
+ "Rain"         : "Millimeter",
+ "Noise"        : "Decibel",
+ "Pressure"     : "Millibar",
+ "Time"         : "Seconds"
 };
 
 
@@ -208,7 +209,7 @@ exports.getThermostate = function(req, callback){
         "Nothing of what's returned can be used",
         [
           new response.MeasureModel("Temperature",  module.body.measured.temperature, unit.Temperature), //temprature of last measurement
-          new response.MeasureModel("Time",  module.body.measured.time, "seconds")      //Time of the measurement
+          new response.MeasureModel("Time",  module.body.measured.time, unit.Time)      //Time of the measurement
         ],
         info.time_exec,
         info.time_server
