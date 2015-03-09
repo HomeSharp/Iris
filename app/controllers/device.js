@@ -120,3 +120,16 @@ exports.getWeatherStation = function(req, res) {
     }
   });
 };
+
+getReqInfoParams = function(req){
+  var reqInfo = {
+    reqInfo: {
+      token: req.headers.access_token,
+      brand: req.headers.brand,
+      tokenSecret: req.headers.tokensecret,
+      publicKey: req.headers.publickey,
+      privateKey: req.headers.privatekey
+    }
+  }
+  return reqInfo
+}
