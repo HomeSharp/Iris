@@ -57,6 +57,9 @@ exports.getDevices = function (req, callback) {
 
 };
 
+getSensorInfo = function (req, callback) {
+
+};
 
 getSensors = function(req, deviceAnswer, callback) {
     var options = {
