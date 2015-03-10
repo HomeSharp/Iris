@@ -19,14 +19,14 @@ function respondError(err, res){
 };
 
 
-exports.getModule = function(req, res) {
+exports.getOutdoorModule = function(req, res) {
 
   requiredHeaders(req, function(error, reqInfo){
 
     if(error !== null){
       respondError(error, res)
     }else{
-      Bubbles.getModule(reqInfo, function(err, device) {
+      Bubbles.getOutdoorModule(reqInfo, function(err, device) {
         if (err !== null) {
           respondError(err, res);
         }

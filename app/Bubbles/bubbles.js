@@ -140,12 +140,12 @@ function chooseBubble(brand) {
 
 
 
-exports.getModule = function(req, callback){
+exports.getOutdoorModule = function(req, callback){
   var callBubble;
 
   if(callBubble = getBrandBubble(req,callback)){
 
-    callBubble.getModule(req.reqInfo, function(error, module){
+    callBubble.getOutdoorModule(req.reqInfo, function(error, module){
 
       if(error !== null){
 

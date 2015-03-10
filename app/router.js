@@ -17,17 +17,17 @@ router.route('/User/Devices')
 router.route('/Device/WeatherStation')
   .get(deviceCtrl.getWeatherStation);
 
-// Endpoint module
-router.route('/Device/Module')
-  .get(deviceCtrl.getModule);
-
 // Endpoint device RainGauge
 router.route('/Device/RainGauge')
   .get(deviceCtrl.getRainGauge);
 
 // Endpoint device IndoorModule
 router.route('/Device/IndoorModule')
-    .get(deviceCtrl.getIndoorModule);
+  .get(deviceCtrl.getIndoorModule);
+
+// Endpoint module
+router.route('/Device/OutdoorModule')
+  .get(deviceCtrl.getOutdoorModule);
 
 // Endpoint device Thermostate (not the same as thermometer)
 router.route('/Device/Thermostate')

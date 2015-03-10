@@ -12,15 +12,16 @@ var unit = {
  "Time"         : "Seconds"
 };
 var deviceType = {
-  "NAMain"     : "WeatherStation",
-  "NAModule1"   : "OutdoorModule",
-  "NAModule4": "IndoorModule",
-  "NAModule3"  : "RainGauge",
-  "NAPlug"        : "ThermoPlug",
-  "NATherm1" :    "Thermostate"
+  "NAMain"    : "WeatherStation",
+  "NAModule1" : "OutdoorModule",
+  "NAModule4" : "IndoorModule",
+  "NAModule3" : "RainGauge",
+  "NAPlug"    : "ThermoPlug",
+  "NATherm1"  : "Thermostate"
 };
 
 function netatmoRequest(options, callback) {
+
   http.get(options, function(resp){
     var str = "";
     resp.on('data', function(chunk){
@@ -192,11 +193,11 @@ exports.getUser = function(req, callback){
 };
 
 
-exports.getModule = function(req, callback) {
+exports.getOutdoorModule = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature,CO2,Humidity,Pressure,Noise,Rain";
+  var type = "Temperature,Humidity";
 
   var options = {
     host: 'api.netatmo.net',
@@ -219,15 +220,11 @@ exports.getModule = function(req, callback) {
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
-        "Module",
+        "OutdoorModule",
         null,
         [
           new response.MeasureModel("Temperature",  module.body[0].value[0][0], unit.Temperature),
-          new response.MeasureModel("CO2",          module.body[0].value[0][1], unit.CO2),
-          new response.MeasureModel("Humidity",     module.body[0].value[0][2], unit.Humidity),
-          new response.MeasureModel("Pressure",     module.body[0].value[0][3], unit.Pressure),
-          new response.MeasureModel("Noise",        module.body[0].value[0][4], unit.Noise),
-          new response.MeasureModel("Rain",         module.body[0].value[0][5], unit.Rain)
+          new response.MeasureModel("Humidity",     module.body[0].value[0][1], unit.Humidity)
         ],
         info.time_exec,
         info.time_server
