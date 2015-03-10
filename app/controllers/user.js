@@ -4,7 +4,6 @@ var HTTPError = require('node-http-error');
 
 function requiredHeaders(req, next){
   if(req.headers.access_token === undefined) {
-
     next(new HTTPError(400, "No access token present in header"));
   } else if(req.headers.brand === undefined) {
     next(new HTTPError(400, 'No brand present in header'));
@@ -20,33 +19,27 @@ function respondError(err, res){
 };
 
 exports.getUser = function(req, res) {
-  console.log("getUser is called");
   //Check for legit header...
-
   requiredHeaders(req, function(error, reqInfo){
 
-    //Since we really just use requiredHeaders to make sure the use of them, we can then dissmiss the "reqInfo" from that function...
-    var reqInfo = getReqInfoParams(req); //makes use of Telldus requirments...
+    //makes use of Telldus requirments...
+    var reqInfo = getReqInfoParams(req);
 
     if(error !== null){
-        respondError(error, res);
+      respondError(error, res);
     }else{
-        Bubbles.getUser(reqInfo, function(error, user){
-
-            if(error !== null){
-                respondError(error, res);
-            }else{
-                res.send(user);
-            }
-        });
+      Bubbles.getUser(reqInfo, function(error, user){
+        if(error !== null){
+          respondError(error, res);
+        }else{
+          res.send(user);
+        }
+      });
     }
-
   });
 };
 
-exports.getDevices = function(req, res) {
-
-  console.log("getDevices is called");
+exports.getDevices = function(req, res) {  
 
   var reqInfo = getReqInfoParams(req);
 
