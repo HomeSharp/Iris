@@ -39,35 +39,25 @@ exports.getUser = function(req, res) {
   });
 };
 
-exports.getDevices = function(req, res) {  
 
-  var reqInfo = getReqInfoParams(req);
 
-  Bubbles.getDevices(reqInfo, function(err, devices) {
+exports.getDevices = function(req, res) {
+  console.log("getDevices is called");
+  requiredHeaders(req, function(err, reqInfo) {
     if(err) {
       respondError(err, res);
     } else {
-      res.send(devices);
+      var reqInfo = getReqInfoParams(req);
+
+      Bubbles.getDevices(reqInfo, function(err, devices) {
+        if(err) {
+          respondError(err, res);
+        } else {
+          res.send(devices);
+        }
+      });
     }
   });
-
-  // Testing purposes
-
-  // requiredHeaders(req, function(err, reqInfo) {
-  //   if(err) {
-  //     respondError(err, res);
-  //   } else {
-  //
-  //     Bubbles.getDevices(reqInfo ,function(err, devices) {
-  //       if(err) {
-  //           respondError(err, res);
-  //       }else{
-  //           res.send(devices);
-  //       }
-  //
-  //     });
-  //   }
-  // });
 };
 
 exports.postDevice = function(req, res) {
