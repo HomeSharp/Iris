@@ -4,17 +4,20 @@ var TelldusBubble = require('./TelldusBubble/TelldusBubble');
 var HTTPError = require('node-http-error');
 
 function getBrandBubble(req, callback){
-  // 1 choose proper bubble
+
   var callBubble = chooseBubble(req.reqInfo.brand);
+
+  // Bubble not found
   if(callBubble === undefined) {
-    // Bubble not found
-    console.log("Error: " + "Brand not found"); //TODO: Borde inte vara här.. borde tas hand om i respondError()
+    //TODO: Borde inte vara här.. borde tas hand om i respondError()
     callback(new HTTPError(400, "Brand not found"));
   }
   return callBubble;
 }
+
 function requierdParams(paramsToCheckForArr, req, callback){
   var flag = false; // This flag prevent a bug... (callback was calling twice...)
+
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
       console.log(paramsToCheckForArr[i]);
@@ -27,16 +30,13 @@ function requierdParams(paramsToCheckForArr, req, callback){
   if(flag === false){
     callback(null);
   }
-
 }
 
 exports.getDevices = function(req, callback) {
   var callBubble;
-  // 1 choose proper bubble  
 
   if(callBubble = getBrandBubble(req, callback)) {
 
-    // 2 call that bubble
     callBubble.getDevices(req.reqInfo , function(err, devices) {
       if(err){
         // a Bubble plugin error occured
@@ -60,10 +60,9 @@ exports.getUser = function(req, callback){
 
       if(error !== null){
         callback(error);
-      }else if(user === undefined){
-        //Couldn't get User
-        console.log("Could not get user, user was undefined");
 
+      //Couldn't get User
+      }else if(user === undefined){
         callback(new HTTPError(404, "User was undefined"));
       }else{
         callback(null, user);
@@ -77,24 +76,23 @@ exports.getRainGauge = function(req, callback){
 
   if(callBubble = getBrandBubble(req,callback)){
     requierdParams(["deviceId", "moduleId"],req, function(error) {
+      if (error !== null) {
+        callback(error);
+      } else {
+        callBubble.getRainGauge(req.reqInfo, function (error, RainGauge) {
 
-    if (error !== null) {
-      callback(error);
-    } else {
-      callBubble.getRainGauge(req.reqInfo, function (error, RainGauge) {
+          if (error !== null) {
 
-        if (error !== null) {
+            callback(error);
+          } else if (RainGauge === undefined) {
+            callback(new HTTPError(404, "RainGauge not found"));
+          } else {
+            callback(null, RainGauge);
+          }
 
-          callback(error);
-        } else if (RainGauge === undefined) {
-          callback(new HTTPError(404, "RainGauge not found"));
-        } else {
-          callback(null, RainGauge);
-        }
-
-      });
-    }
-  });
+        });
+      }
+    });
   }
 };
 
@@ -172,14 +170,11 @@ exports.getIndoorModule = function(req, callback){
     requierdParams(["deviceId", "moduleId"], req, function(error){ //Checks for valid parameters
 
       if (error !== null) {
-        console.log("invalid or missing parameter");
         callback(error);
       }else{
-        console.log("OK parameter");
         callBubble.getIndoorModule(req.reqInfo, function (error, IndoorModule) {
 
           if (error !== null) {
-
             callback(error);
           } else if (IndoorModule === undefined) {
             callback(new HTTPError(404, "IndoorModule not found"));
