@@ -5,13 +5,12 @@ var deviceCtrl = require('./controllers/device');
 // Express router
 var router = express.Router();
 
-// Endpoint user
+// Endpoint user info
 router.route('/User')
   .get(userCtrl.getUser);
 
-// Endpoint user devices
+// Endpoint list of users devices
 router.route('/User/Devices')
-    .post(userCtrl.postDevice)
     .get(userCtrl.getDevices);
 
 // Endpoint WeatherStation
