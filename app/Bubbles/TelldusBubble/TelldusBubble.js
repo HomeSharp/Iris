@@ -44,16 +44,68 @@ exports.getDevices = function (req, callback) {
     tokenSecret:  req.tokenSecret
   };
 
-  telldusOauthRequest(options, function(err, answer){
-    if(err) {
-      callback(err);
-    }
-    else {
-      callback(null, answer);
-    }
-  });
+  telldusOauthRequest(options, function(err, deviceAnswer){
+        if(err) {
+            callback(err);
+        }
+        else {
+            
+            getSensors(req, deviceAnswer, callback);
+            
+        }
+   });
+
 };
 
+
+getSensors = function(req, deviceAnswer, callback) {
+    var options = {
+        host: 'http://api.telldus.com/json',
+        path: '/sensors/list?',
+        queryMethods: 1,
+        publicKey: req.publicKey,
+        privateKey: req.privateKey,
+        token: req.token,
+        tokenSecret: req.tokenSecret
+    };
+    
+    telldusOauthRequest(options, function (err, sensorAnswer) {
+        if (err) {
+            callback(err);
+        }
+        else {
+
+            var devices = JSON.parse(deviceAnswer);
+            var sensors = JSON.parse(sensorAnswer); 
+            
+            var answer = private_DeviceListFixerUpper(devices, sensors);
+
+            callback(null, answer);
+        }
+    });
+};
+
+
+private_DeviceListFixerUpper = function (devices, sensors) {
+    var usersDeviceList = { };
+    var deviceList = [];
+    var sensorList = [];
+        
+    for (var key in devices) {
+        if (key === 'length' || !devices.hasOwnProperty(key)) continue;
+        var deviceList = devices[key];       
+    }
+   
+    for (var key in sensors) {
+        if (key === 'length' || !sensors.hasOwnProperty(key)) continue;
+        var sensorList = sensors[key];       
+    }
+    
+    usersDeviceList.devices = deviceList;
+    usersDeviceList.sensors = sensorList;
+    
+    return usersDeviceList;
+}
 
 
 exports.getUser = function(req, callback){
