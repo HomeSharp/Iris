@@ -11,6 +11,14 @@ var unit = {
  "Pressure"     : "Millibar",
  "Time"         : "Seconds"
 };
+var deviceType = {
+  "NAMain"     : "WeatherStation",
+  "NAModule1"   : "OutdoorModule",
+  "NAModule4": "IndoorModule",
+  "NAModule3"  : "RainGauge",
+  "NAPlug"        : "ThermoPlug",
+  "NATherm1" :    "Thermostate"
+};
 
 function netatmoRequest(options, callback) {
   http.get(options, function(resp){
@@ -73,7 +81,7 @@ exports.getRainGauge = function(req, callback){
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
-        "Module",
+        "RainGauge",
         null,
         [
           new response.MeasureModel("Rain",  module.body[0].value[0][0], unit.Rain)
@@ -337,9 +345,10 @@ private_DeviceListFixerUpper = function(modules, devices){
       mainDevice: null,
       deviceType: modules.deviceType,
       moduleName:modules.moduleName,
-      meassures: modules.meassures,
+      meassures: modules.meassures
+      /*,
       modulesIds: devices[i].body.modulesIds,
-      cipher_id: devices[i].body.cipher_id})
+      cipher_id: devices[i].body.cipher_id}*/ })
   }
 
   //usersDeviceList.modules = moduleList;
@@ -347,7 +356,6 @@ private_DeviceListFixerUpper = function(modules, devices){
 
   return usersDeviceList;
 }
-
 
 private_getTypeUnit = function(type){
   switch(type){
@@ -375,6 +383,7 @@ private_getTypeUnit = function(type){
   }
 }
 
+
 private_DeviceListStripper = function(answer){
   var arrWithModels = [];
 
@@ -388,11 +397,11 @@ private_DeviceListStripper = function(answer){
 
       arrWithMeasureModels.push(meModel);
     }
-
+    //console.log(answer[i])
     var reModel = new response.ResponseModel(
       answer[i]._id,
       answer[i].main_device !== undefined ? answer[i].main_device : null,  // if Main_device doesnt exist, then use null
-      answer[i].type,
+      deviceType[answer[i].type],
       answer[i].module_name,
       arrWithMeasureModels,
       info.time_exec,
