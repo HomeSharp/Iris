@@ -74,7 +74,7 @@ exports.getUser = function(req, callback){
     }
     else {
       answer = JSON.parse(answer);
-      userRe = new userResponse.UserResponseModel("Telldus", answer.email, null, null);
+      userRe = new response.UserResponseModel("Telldus", answer.email, null, null);
 
       callback(null, userRe.makeJSON());
     }
