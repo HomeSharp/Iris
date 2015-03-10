@@ -323,17 +323,26 @@ exports.getWeatherStation = function(req, callback){
 }
 
 private_DeviceListFixerUpper = function(modules, devices){
-  var usersDeviceList = {modules : null, devices : null};
-  var moduleList = [];
+  var usersDeviceList = {/*modules : null,*/ devices : null};
+  //var moduleList = [];
   var deviceList = [];
   for(var i = 0; i < modules.length; i++){
-    moduleList.push(modules[i].body)
+    //moduleList.push(modules[i].body)
+    deviceList.push(modules[i].body.modules[0])
   }
   for(var i = 0; i < devices.length; i++){
-    deviceList.push(devices[i].body)
+    var modules = devices[i].body.modules[0];
+    deviceList.push({
+      deviceId:modules.deviceId,
+      mainDevice: null,
+      deviceType: modules.deviceType,
+      moduleName:modules.moduleName,
+      meassures: modules.meassures,
+      modulesIds: devices[i].body.modulesIds,
+      cipher_id: devices[i].body.cipher_id})
   }
 
-  usersDeviceList.modules = moduleList;
+  //usersDeviceList.modules = moduleList;
   usersDeviceList.devices = deviceList;
 
   return usersDeviceList;
