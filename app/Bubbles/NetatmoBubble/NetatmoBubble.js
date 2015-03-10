@@ -11,8 +11,17 @@ var unit = {
  "Pressure"     : "Millibar",
  "Time"         : "Seconds"
 };
+var deviceType = {
+  "NAMain"    : "WeatherStation",
+  "NAModule1" : "OutdoorModule",
+  "NAModule4" : "IndoorModule",
+  "NAModule3" : "RainGauge",
+  "NAPlug"    : "ThermoPlug",
+  "NATherm1"  : "Thermostate"
+};
 
 function netatmoRequest(options, callback) {
+
   http.get(options, function(resp){
     var str = "";
     resp.on('data', function(chunk){
@@ -73,7 +82,7 @@ exports.getRainGauge = function(req, callback){
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
-        "Module",
+        "RainGauge",
         null,
         [
           new response.MeasureModel("Rain",  module.body[0].value[0][0], unit.Rain)
@@ -184,11 +193,11 @@ exports.getUser = function(req, callback){
 };
 
 
-exports.getModule = function(req, callback) {
+exports.getOutdoorModule = function(req, callback) {
 
   var scale = "max";
   var dateEnd = "last";
-  var type = "Temperature,CO2,Humidity,Pressure,Noise,Rain";
+  var type = "Temperature,Humidity";
 
   var options = {
     host: 'api.netatmo.net',
@@ -211,15 +220,11 @@ exports.getModule = function(req, callback) {
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId,
-        "Module",
+        "OutdoorModule",
         null,
         [
           new response.MeasureModel("Temperature",  module.body[0].value[0][0], unit.Temperature),
-          new response.MeasureModel("CO2",          module.body[0].value[0][1], unit.CO2),
-          new response.MeasureModel("Humidity",     module.body[0].value[0][2], unit.Humidity),
-          new response.MeasureModel("Pressure",     module.body[0].value[0][3], unit.Pressure),
-          new response.MeasureModel("Noise",        module.body[0].value[0][4], unit.Noise),
-          new response.MeasureModel("Rain",         module.body[0].value[0][5], unit.Rain)
+          new response.MeasureModel("Humidity",     module.body[0].value[0][1], unit.Humidity)
         ],
         info.time_exec,
         info.time_server
@@ -323,22 +328,31 @@ exports.getWeatherStation = function(req, callback){
 }
 
 private_DeviceListFixerUpper = function(modules, devices){
-  var usersDeviceList = {modules : null, devices : null};
-  var moduleList = [];
+  var usersDeviceList = {/*modules : null,*/ devices : null};
+  //var moduleList = [];
   var deviceList = [];
   for(var i = 0; i < modules.length; i++){
-    moduleList.push(modules[i].body)
+    //moduleList.push(modules[i].body)
+    deviceList.push(modules[i].body.modules[0])
   }
   for(var i = 0; i < devices.length; i++){
-    deviceList.push(devices[i].body)
+    var modules = devices[i].body.modules[0];
+    deviceList.push({
+      deviceId:modules.deviceId,
+      mainDevice: null,
+      deviceType: modules.deviceType,
+      moduleName:modules.moduleName,
+      meassures: modules.meassures
+      /*,
+      modulesIds: devices[i].body.modulesIds,
+      cipher_id: devices[i].body.cipher_id}*/ })
   }
 
-  usersDeviceList.modules = moduleList;
+  //usersDeviceList.modules = moduleList;
   usersDeviceList.devices = deviceList;
 
   return usersDeviceList;
 }
-
 
 private_getTypeUnit = function(type){
   switch(type){
@@ -366,6 +380,7 @@ private_getTypeUnit = function(type){
   }
 }
 
+
 private_DeviceListStripper = function(answer){
   var arrWithModels = [];
 
@@ -379,11 +394,11 @@ private_DeviceListStripper = function(answer){
 
       arrWithMeasureModels.push(meModel);
     }
-
+    //console.log(answer[i])
     var reModel = new response.ResponseModel(
       answer[i]._id,
       answer[i].main_device !== undefined ? answer[i].main_device : null,  // if Main_device doesnt exist, then use null
-      answer[i].type,
+      deviceType[answer[i].type],
       answer[i].module_name,
       arrWithMeasureModels,
       info.time_exec,

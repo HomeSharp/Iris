@@ -37,7 +37,7 @@ exports.getDevices = function (req, callback) {
   var options = {
     host: 'http://api.telldus.com/json',
     path: '/devices/list?',
-    queryMethods: 1,
+    queryMethods: 1023,
     publicKey:    req.publicKey,
     privateKey:   req.privateKey,
     token:        req.token,
