@@ -1,4 +1,3 @@
-//var User = require('../models/user');
 var Bubbles = require('../Bubbles/bubbles');
 var HTTPError = require('node-http-error');
 
@@ -42,7 +41,7 @@ exports.getUser = function(req, res) {
 
 
 exports.getDevices = function(req, res) {
-  console.log("getDevices is called");
+
   requiredHeaders(req, function(err, reqInfo) {
     if(err) {
       respondError(err, res);
@@ -59,16 +58,6 @@ exports.getDevices = function(req, res) {
     }
   });
 };
-
-exports.postDevice = function(req, res) {
-  //Data from Quarts
-  //access_token and brand
-
-  var reqInfo = { token: req.body.access_token, brand: req.body.brand };
-
-  res.send(req.body);
-};
-
 
 getReqInfoParams = function(req){
   var reqInfo = {

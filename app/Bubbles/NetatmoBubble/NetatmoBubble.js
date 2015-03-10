@@ -1,7 +1,6 @@
 var http = require('http');
 var HTTPError = require('node-http-error');
 var response = require("../ResponseModel");
-var userResponse = require("../UserResponseModel");
 
 var unit = {
  "Temperature"  : "Celsius",
@@ -176,7 +175,7 @@ exports.getUser = function(req, callback){
       callback(error);
     }else{
       answer = JSON.parse(answer);
-      userRe = new userResponse.UserResponseModel("Netatmo", answer.body.mail ,answer.body.time_exec, answer.body.time_server);
+      userRe = new response.UserResponseModel("Netatmo", answer.body.mail ,answer.body.time_exec, answer.body.time_server);
 
       callback(null, userRe.makeJSON());
     }

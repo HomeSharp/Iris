@@ -29,3 +29,18 @@ exports.MeasureModel = function(type, value, unit){
   this.value = value;     //Should be in number form (not string)
   this.unit  = unit;      //Unit = celcius or other?
 };
+
+exports.UserResponseModel = function(brand,email,time_exec,time_server){
+  this.status = 200;
+  this.body = {
+    brand   : brand,
+    email   : email
+
+  };
+  this.time_exec= time_exec;
+  this.time_server= time_server;
+
+  this.makeJSON = function(){
+    return JSON.stringify(this)
+  }
+};

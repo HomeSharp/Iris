@@ -20,12 +20,7 @@ function respondError(err, res){
 
 
 exports.getModule = function(req, res) {
-  // give info to Bubbles if:
-  // 1) access_token 2) brand
 
-  // expects to get a module...
-
-  //var reqInfo = { reqInfo: { token: req.headers.access_token, brand: req.headers.brand } };
   requiredHeaders(req, function(error, reqInfo){
 
     if(error !== null){
@@ -43,7 +38,6 @@ exports.getModule = function(req, res) {
 };
 
 exports.getIndoorModule = function(req, res){
-  console.log("getIndoorModule is called");
 
   requiredHeaders(req, function(error, reqInfo){
     if(error !== null){
@@ -62,11 +56,6 @@ exports.getIndoorModule = function(req, res){
 };
 
 exports.getRainGauge = function(req, res) {
-  console.log("getRainGauge is called");
-  // give info to Bubbles if:
-  // 1) access_token 2) brand
-
-  // expects to get a RainGauge...
 
   requiredHeaders(req, function(error, reqInfo) {
 
@@ -86,7 +75,7 @@ exports.getRainGauge = function(req, res) {
 };
 
 exports.getThermostate = function(req, res) {
-  console.log("getThermostate is called");
+
   requiredHeaders(req, function(err, reqInfo){
     if(err){
       respondError(err, res)
@@ -103,19 +92,17 @@ exports.getThermostate = function(req, res) {
 
 
 exports.getWeatherStation = function(req, res) {
-    console.log("getWeatherStation is called");
-    //console.log(req);
+
   requiredHeaders(req, function(error, reqInfo) {
     if(error) {
       respondError(error, res);
     } else {
       Bubbles.getWeatherStation(reqInfo ,function(error, device) {
         if(error) {
-            respondError(error, res);
+          respondError(error, res);
         }else{
-            res.send(device);
+          res.send(device);
         }
-
       });
     }
   });
