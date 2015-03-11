@@ -3,6 +3,12 @@ var HTTPError = require('node-http-error');
 var oauth = require('oauth')
 var response = require("../ResponseModel");
 
+var telldusState = {
+ 1    : "On",
+ 2    : "Off",
+ 16   : "Dimmed"
+};
+
 function telldusOauthRequest(options, callback) {
 
   // Oauth npm style
@@ -152,7 +158,21 @@ exports.getSwitch = function(req, callback) {
       callback(err);
     }
     else {
-      callback(null, answer);
+      var info = JSON.parse(answer);
+
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId,
+        "Switch",
+        info.name,
+        [
+          new response.MeasureModel("State",  telldusState[info.state], "State")
+        ],
+        info.time_exec,
+        info.time_server
+      );
+
+      callback(null, reModel.makeJSON());
     }
   });
 };
