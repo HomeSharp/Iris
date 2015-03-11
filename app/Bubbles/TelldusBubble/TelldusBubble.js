@@ -56,14 +56,33 @@ exports.getDevices = function (req, callback) {
 
 };
 
-getSensorInfo = function (req, callback) {
-
+getSensorInfo = function (req, callback) {    
+    var options = {
+        host: 'http://api.telldus.com/json',
+        path: '/sensor/info?supportedMethods=1023',
+        queryMethods: 1023,
+        publicKey: req.publicKey,
+        privateKey: req.privateKey,
+        token: req.token,
+        tokenSecret: req.tokenSecret
+    };
+    
+    telldusOauthRequest(options, function (err, deviceAnswer) {
+        if (err) {
+            callback(err);
+        }
+        else {
+            
+            getSensors(req, deviceAnswer, callback);
+            
+        }
+    });
 };
 
 getSensors = function(req, deviceAnswer, callback) {
     var options = {
         host: 'http://api.telldus.com/json',
-        path: '/sensors/list?',
+        path: '/sensors/list?supportedMethods=1023',
         queryMethods: 1,
         publicKey: req.publicKey,
         privateKey: req.privateKey,
