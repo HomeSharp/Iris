@@ -221,10 +221,10 @@ exports.getSwitch = function(req, callback) {
   }
 };
 
-exports.getSensorInfo = function (req, callback) {
+exports.getSensor = function (req, callback) {
     var callBubble = getBrandBubble(req, callback);
     if (callBubble) {
-        callBubble.getSensorInfo(req.reqInfo, function (err, sensorInfo) {
+        callBubble.getSensor(req.reqInfo, function (err, sensorInfo) {
             if (err) {
                 callback(err);
             } else {

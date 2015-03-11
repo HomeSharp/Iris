@@ -56,10 +56,12 @@ exports.getDevices = function (req, callback) {
 
 };
 
-getSensorInfo = function (req, callback) {    
-    var options = {
-        host: 'http://api.telldus.com/json',
-        path: '/sensor/info?' + req.query.deviceId + "&supportedMethods=1023",
+//By id
+exports.getSensor = function (req, callback) {    
+  var options = {
+    host: 'http://api.telldus.com/json',
+    //path: '/sensor/info?id=' + req.query.deviceId + "&supportedMethods=1023",
+    path: '/sensor/info?id=' + '' + "&supportedMethods=1023",
         queryMethods: 1023,
         publicKey: req.publicKey,
         privateKey: req.privateKey,
@@ -79,6 +81,7 @@ getSensorInfo = function (req, callback) {
     });
 };
 
+//All
 getSensors = function(req, deviceAnswer, callback) {
     var options = {
         host: 'http://api.telldus.com/json',

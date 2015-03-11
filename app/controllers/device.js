@@ -133,13 +133,13 @@ exports.getReqInfoParams = function(req){
 }
 
 
-exports.getSensorInfo = function(req, res) {
+exports.getSensor = function(req, res) {
   requiredHeaders(req, function(err, reqInfo) {
     if(err) {
       respondError(err, res);
     } else {
       var reqInfo = getReqInfoParams(req);
-      Bubbles.getSensorInfo(reqInfo, function(err, device) {
+      Bubbles.getSensor(reqInfo, function(err, device) {
         if(err) {
           respondError(err, res);
         } else {

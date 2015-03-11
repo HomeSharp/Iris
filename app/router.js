@@ -38,7 +38,7 @@ router.route('/Device/Switch')
   .get(deviceCtrl.getSwitch);
 
 // Endpoint device SensorInfo
-router.route('/Device/SensorInfo')
-  .get(deviceCtrl.getSensorInfo);
+router.route('/Device/Sensor')
+  .get(deviceCtrl.getSensor);
 
 module.exports = router;
