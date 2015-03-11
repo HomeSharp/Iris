@@ -220,3 +220,16 @@ exports.getSwitch = function(req, callback) {
     });
   }
 };
+
+exports.getSensorInfo = function (req, callback) {
+    var callBubble = getBrandBubble(req, callback);
+    if (callBubble) {
+        callBubble.getSensorInfo(req.reqInfo, function (err, sensorInfo) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, sensorInfo);
+            }
+        });
+    }
+};

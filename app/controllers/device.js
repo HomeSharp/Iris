@@ -118,7 +118,7 @@ exports.getSwitch = function(req, res) {
   });
 };
 
-getReqInfoParams = function(req){
+exports.getReqInfoParams = function(req){
   var reqInfo = {
     reqInfo: {
       token: req.headers.access_token,
@@ -131,3 +131,21 @@ getReqInfoParams = function(req){
   }
   return reqInfo
 }
+
+
+exports.getSensorInfo = function(req, res) {
+  requiredHeaders(req, function(err, reqInfo) {
+    if(err) {
+      respondError(err, res);
+    } else {
+      var reqInfo = getReqInfoParams(req);
+      Bubbles.getSensorInfo(reqInfo, function(err, device) {
+        if(err) {
+          respondError(err, res);
+        } else {
+          res.send(device);
+        }
+      });
+    }
+  });
+};

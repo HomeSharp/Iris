@@ -59,7 +59,7 @@ exports.getDevices = function (req, callback) {
 getSensorInfo = function (req, callback) {    
     var options = {
         host: 'http://api.telldus.com/json',
-        path: '/sensor/info?supportedMethods=1023',
+        path: '/sensor/info?' + req.query.deviceId + "&supportedMethods=1023",
         queryMethods: 1023,
         publicKey: req.publicKey,
         privateKey: req.privateKey,
@@ -67,13 +67,13 @@ getSensorInfo = function (req, callback) {
         tokenSecret: req.tokenSecret
     };
     
-    telldusOauthRequest(options, function (err, deviceAnswer) {
+    telldusOauthRequest(options, function (err, answer) {
         if (err) {
             callback(err);
         }
         else {
             
-            getSensors(req, deviceAnswer, callback);
+            callback(null, answer);
             
         }
     });
