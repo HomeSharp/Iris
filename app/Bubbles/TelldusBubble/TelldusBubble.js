@@ -21,7 +21,6 @@ function telldusOauthRequest(options, callback) {
     options.token,
     options.tokenSecret,
     function(err, data, res){
-
       if(err){
         error = JSON.parse(data).error
         callback(new HTTPError(401, "Got error: " + error)); //Dunno if the statuscode is right...
@@ -36,7 +35,7 @@ function telldusOauthRequest(options, callback) {
 exports.getDevices = function (req, callback) {
   var options = {
     host: 'http://api.telldus.com/json',
-    path: '/devices/list?',
+    path: '/devices/list?supportedMethods=1023',
     queryMethods: 1023,
     publicKey:    req.publicKey,
     privateKey:   req.privateKey,
@@ -80,4 +79,25 @@ exports.getUser = function(req, callback){
     }
   });
 
+};
+
+exports.getSwitch = function(req, callback) {
+  var options = {
+    host: 'http://api.telldus.com/json',
+    path: '/device/info?id=' + req.query.deviceId + "&supportedMethods=1023",
+    queryMethods: 1023,
+    publicKey:    req.publicKey,
+    privateKey:   req.privateKey,
+    token:        req.token,
+    tokenSecret:  req.tokenSecret
+  };
+
+  telldusOauthRequest(options, function(err, answer){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, answer);
+    }
+  });
 };
