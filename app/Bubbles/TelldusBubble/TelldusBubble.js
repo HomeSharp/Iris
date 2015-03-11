@@ -81,7 +81,7 @@ getSensors = function(req, deviceAnswer, callback) {
             var devices = JSON.parse(deviceAnswer);
             var sensors = JSON.parse(sensorAnswer); 
             
-            var answer = private_DeviceListFixerUpper(devices, sensors);
+            var answer = mergeDevicesSonesor(devices, sensors);
 
             callback(null, answer);
         }
@@ -89,7 +89,7 @@ getSensors = function(req, deviceAnswer, callback) {
 };
 
 
-private_DeviceListFixerUpper = function (devices, sensors) {
+mergeDevicesSonesor = function (devices, sensors) {
     var usersDeviceList = { };
     var deviceList = [];
     var sensorList = [];
