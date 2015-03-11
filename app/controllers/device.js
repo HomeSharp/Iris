@@ -118,7 +118,7 @@ exports.getSwitch = function(req, res) {
   });
 };
 
-exports.getReqInfoParams = function(req){
+function getReqInfoParams(req){
   var reqInfo = {
     reqInfo: {
       token: req.headers.access_token,

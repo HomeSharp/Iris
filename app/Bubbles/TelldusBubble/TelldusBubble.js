@@ -60,8 +60,7 @@ exports.getDevices = function (req, callback) {
 exports.getSensor = function (req, callback) {    
   var options = {
     host: 'http://api.telldus.com/json',
-    //path: '/sensor/info?id=' + req.query.deviceId + "&supportedMethods=1023",
-    path: '/sensor/info?id=' + '' + "&supportedMethods=1023",
+    path: '/sensor/info?id=' + req.query.deviceId + "&supportedMethods=1023",    
         queryMethods: 1023,
         publicKey: req.publicKey,
         privateKey: req.privateKey,
