@@ -20,9 +20,7 @@ function respondError(err, res){
 
 
 exports.getOutdoorModule = function(req, res) {
-
   requiredHeaders(req, function(error, reqInfo){
-
     if(error !== null){
       respondError(error, res)
     }else{
@@ -38,7 +36,6 @@ exports.getOutdoorModule = function(req, res) {
 };
 
 exports.getIndoorModule = function(req, res){
-
   requiredHeaders(req, function(error, reqInfo){
     if(error !== null){
       respondError(error, res);
@@ -56,9 +53,7 @@ exports.getIndoorModule = function(req, res){
 };
 
 exports.getRainGauge = function(req, res) {
-
   requiredHeaders(req, function(error, reqInfo) {
-
     if (error !== null) {
       respondError(error, res)
     } else {
@@ -75,7 +70,6 @@ exports.getRainGauge = function(req, res) {
 };
 
 exports.getThermostate = function(req, res) {
-
   requiredHeaders(req, function(err, reqInfo){
     if(err){
       respondError(err, res)
@@ -92,7 +86,6 @@ exports.getThermostate = function(req, res) {
 
 
 exports.getWeatherStation = function(req, res) {
-
   requiredHeaders(req, function(error, reqInfo) {
     if(error) {
       respondError(error, res);
@@ -108,6 +101,23 @@ exports.getWeatherStation = function(req, res) {
   });
 };
 
+exports.getSwitch = function(req, res) {
+  requiredHeaders(req, function(err, reqInfo) {
+    if(err) {
+      respondError(err, res);
+    } else {
+      var reqInfo = getReqInfoParams(req);
+      Bubbles.getSwitch(reqInfo, function(err, device) {
+        if(err) {
+          respondError(err, res);
+        } else {
+          res.send(device);
+        }
+      });
+    }
+  });
+};
+
 getReqInfoParams = function(req){
   var reqInfo = {
     reqInfo: {
@@ -115,7 +125,8 @@ getReqInfoParams = function(req){
       brand: req.headers.brand,
       tokenSecret: req.headers.tokensecret,
       publicKey: req.headers.publickey,
-      privateKey: req.headers.privatekey
+      privateKey: req.headers.privatekey,
+      query: req.query
     }
   }
   return reqInfo

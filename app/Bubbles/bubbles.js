@@ -207,3 +207,16 @@ exports.getWeatherStation = function(req, callback){
         });
     }
 };
+
+exports.getSwitch = function(req, callback) {
+  var callBubble = getBrandBubble(req, callback);
+  if (callBubble) {
+    callBubble.getSwitch(req.reqInfo, function(err, switchInfo) {
+      if(err) {
+        callback(err);
+      } else {
+        callback(null, switchInfo);
+      }
+    });
+  }
+};

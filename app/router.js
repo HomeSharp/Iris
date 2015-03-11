@@ -25,12 +25,16 @@ router.route('/Device/RainGauge')
 router.route('/Device/IndoorModule')
   .get(deviceCtrl.getIndoorModule);
 
-// Endpoint module
+// Endpoint device OutdoorModule
 router.route('/Device/OutdoorModule')
   .get(deviceCtrl.getOutdoorModule);
 
 // Endpoint device Thermostate (not the same as thermometer)
 router.route('/Device/Thermostate')
   .get(deviceCtrl.getThermostate);
+
+// Endpoint device switch on/off power
+router.route('/Device/Switch')
+  .get(deviceCtrl.getSwitch);
 
 module.exports = router;
