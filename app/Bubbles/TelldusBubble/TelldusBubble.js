@@ -80,7 +80,7 @@ getSensors = function(req, deviceAnswer, callback) {
             var devices = JSON.parse(deviceAnswer);
             var sensors = JSON.parse(sensorAnswer); 
             
-            var answer = mergeDevicesSonesor(devices, sensors);
+            var answer = mergeDevicesSensors(devices, sensors);
 
             callback(null, answer);
         }
@@ -88,7 +88,7 @@ getSensors = function(req, deviceAnswer, callback) {
 };
 
 
-mergeDevicesSonesor = function (devices, sensors) {
+mergeDevicesSensors = function (devices, sensors) {
     var usersDeviceList = { };
     var deviceList = [];
     var sensorList = [];
