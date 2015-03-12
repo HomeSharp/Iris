@@ -9,6 +9,16 @@ var telldusState = {
  16   : "Dimmed"
 };
 
+var unit = {
+  "Temperature"  : "Celsius",
+  "CO2"          : "Parts per million",
+  "Humidity"     : "Percent",
+  "Rain"         : "Millimeter",
+  "Noise"        : "Decibel",
+  "Pressure"     : "Millibar",
+  "Time"         : "Seconds"
+};
+
 function telldusOauthRequest(options, callback) {
 
   // Oauth npm style
@@ -63,27 +73,44 @@ exports.getDevices = function (req, callback) {
 };
 
 //By id
-exports.getSensor = function (req, callback) {    
+exports.getSensor = function (req, callback) {
   var options = {
     host: 'http://api.telldus.com/json',
     path: '/sensor/info?id=' + req.query.deviceId + "&supportedMethods=1023",    
-        queryMethods: 1023,
-        publicKey: req.publicKey,
-        privateKey: req.privateKey,
-        token: req.token,
-        tokenSecret: req.tokenSecret
-    };
-    
-    telldusOauthRequest(options, function (err, answer) {
-        if (err) {
-            callback(err);
-        }
-        else {
+    queryMethods: 1023,
+    publicKey: req.publicKey,
+    privateKey: req.privateKey,
+    token: req.token,
+    tokenSecret: req.tokenSecret
+  };
+  
+  telldusOauthRequest(options, function (err, answer) {
+    if (err) {
+      callback(err);
+    }
+    else {
+
+      var info = JSON.parse(answer);
+
+      var reModel = new response.ResponseModel(
+        req.query.deviceId,
+        req.query.moduleId, //underfine in Telldus
+        "Sensor",
+        info.name,        
+        [
+          new response.MeasureModel("Temperature", info.data[0].value, unit.Temperature),
+          
+          new response.MeasureModel("Humidity", info.data[1].value, unit.Humidity),
+          
+        ],
+        info.time_exec, //underfine in Telldus
+        info.time_server //underfine in Telldus
+      );
+      
+      callback(null, reModel.makeJSON());
             
-            callback(null, answer);
-            
-        }
-    });
+    }
+  });
 };
 
 //All
