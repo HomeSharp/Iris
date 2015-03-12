@@ -21,7 +21,6 @@ var unit = {
 
 function telldusOauthRequest(options, callback) {
 
-  // Oauth npm style
   var telOauth = new oauth.OAuth(
     "http://api.telldus.com/oauth/requestToken",
     "http://api.telldus.com/oauth/accessToken",
@@ -39,7 +38,7 @@ function telldusOauthRequest(options, callback) {
     function(err, data, res){
       if(err){
         error = JSON.parse(data).error
-        callback(new HTTPError(401, "Got error: " + error)); //Dunno if the statuscode is right...
+        callback(new HTTPError(401, "Got error: " + error));
       }else{
         callback(null,data)
       }
@@ -108,15 +107,14 @@ exports.getDevices = function (req, callback) {
   };
 
   telldusOauthRequest(options, function(err, deviceAnswer){
-        if(err) {
-            callback(err);
-        }
-        else {
-          callback(null, testingPurpose);
-            //getSensors(req, deviceAnswer, callback);
-
-        }
-   });
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, testingPurpose); // Temporary solution until responseModel is used
+      //getSensors(req, deviceAnswer, callback);
+    }
+ });
 
 };
 
@@ -137,9 +135,7 @@ exports.getSensor = function (req, callback) {
       callback(err);
     }
     else {
-
       var info = JSON.parse(answer);
-
       var reModel = new response.ResponseModel(
         req.query.deviceId,
         req.query.moduleId, //underfine in Telldus
@@ -147,69 +143,62 @@ exports.getSensor = function (req, callback) {
         info.name,
         [
           new response.MeasureModel("Temperature", info.data[0].value, unit.Temperature),
-
           new response.MeasureModel("Humidity", info.data[1].value, unit.Humidity),
-
         ],
         info.time_exec, //underfine in Telldus
         info.time_server //underfine in Telldus
       );
 
       callback(null, reModel.makeJSON());
-
     }
   });
 };
 
 //All
 getSensors = function(req, deviceAnswer, callback) {
-    var options = {
-        host: 'http://api.telldus.com/json',
-        path: '/sensors/list?supportedMethods=1023',
-        queryMethods: 1,
-        publicKey: req.publicKey,
-        privateKey: req.privateKey,
-        token: req.token,
-        tokenSecret: req.tokenSecret
-    };
+  var options = {
+    host: 'http://api.telldus.com/json',
+    path: '/sensors/list?supportedMethods=1023',
+    queryMethods: 1,
+    publicKey: req.publicKey,
+    privateKey: req.privateKey,
+    token: req.token,
+    tokenSecret: req.tokenSecret
+  };
 
-    telldusOauthRequest(options, function (err, sensorAnswer) {
-        if (err) {
-            callback(err);
-        }
-        else {
+  telldusOauthRequest(options, function (err, sensorAnswer) {
+    if (err) {
+      callback(err);
+    } else {
+      var devices = JSON.parse(deviceAnswer);
+      var sensors = JSON.parse(sensorAnswer);
+      var answer = mergeDevicesSensors(devices, sensors);
 
-            var devices = JSON.parse(deviceAnswer);
-            var sensors = JSON.parse(sensorAnswer);
-
-            var answer = mergeDevicesSensors(devices, sensors);
-
-
-            callback(null, answer);
-        }
-    });
+      callback(null, answer);
+    }
+  });
 };
 
 
 mergeDevicesSensors = function (devices, sensors) {
-    var usersDeviceList = { };
-    var deviceList = [];
-    var sensorList = [];
+  var usersDeviceList = { };
+  var deviceList = [];
+  var sensorList = [];
 
-    for (var key in devices) {
-        if (key === 'length' || !devices.hasOwnProperty(key)) continue;
-        var deviceList = devices[key];
-    }
+  for (var key in devices) {
+    if (key === 'length' || !devices.hasOwnProperty(key)) continue;
+    var deviceList = devices[key];
+  }
 
-    for (var key in sensors) {
-        if (key === 'length' || !sensors.hasOwnProperty(key)) continue;
-        var sensorList = sensors[key];
-    }
+  for (var key in sensors) {
+    if (key === 'length' || !sensors.hasOwnProperty(key)) continue;
+    var sensorList = sensors[key];
+  }
 
-    usersDeviceList.devices = deviceList;
-    usersDeviceList.sensors = sensorList;
+  usersDeviceList.devices = deviceList;
+  usersDeviceList.sensors = sensorList;
 
-    return usersDeviceList;
+  return usersDeviceList;
 }
 
 

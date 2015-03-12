@@ -3,13 +3,13 @@ var HTTPError = require('node-http-error');
 var response = require("../ResponseModel");
 
 var unit = {
- "Temperature"  : "Celsius",
- "CO2"          : "Parts per million",
- "Humidity"     : "Percent",
- "Rain"         : "Millimeter",
- "Noise"        : "Decibel",
- "Pressure"     : "Millibar",
- "Time"         : "Seconds"
+  "Temperature"  : "Celsius",
+  "CO2"          : "Parts per million",
+  "Humidity"     : "Percent",
+  "Rain"         : "Millimeter",
+  "Noise"        : "Decibel",
+  "Pressure"     : "Millibar",
+  "Time"         : "Seconds"
 };
 var deviceType = {
   "NAMain"    : "WeatherStation",
@@ -29,7 +29,6 @@ function netatmoRequest(options, callback) {
     });
 
     resp.on('end', function () {
-
       var netResponse = JSON.parse(str);
 
       // if netatmo returns error in JSON response
@@ -71,7 +70,6 @@ exports.getRainGauge = function(req, callback){
       callback(err);
     }
     else {
-
       info = JSON.parse(answer);
       module = info;
 
@@ -167,7 +165,7 @@ exports.getDevices = function(req, callback) {
       var devices = private_DeviceListStripper(module.body.devices);
 
       var usersDeviceList = private_DeviceListFixerUpper(modules, devices);
-      
+
       callback(null, usersDeviceList);
     }
   });

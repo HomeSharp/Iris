@@ -1,9 +1,0 @@
-﻿Körde en GET från Postman
-
-http://localhost:3000/api/User/Devices
-
-I Headern
-access_token = 123123
-Brand = Telldus
-
-Fick fram devices som en array i consolen.

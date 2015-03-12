@@ -4,7 +4,6 @@ var TelldusBubble = require('./TelldusBubble/TelldusBubble');
 var HTTPError = require('node-http-error');
 
 function getBrandBubble(req, next){
-
   var bubble;
   switch(req.reqInfo.brand)
   {
@@ -28,8 +27,6 @@ function requierdParams(paramsToCheckForArr, req, callback){
 
   for(var i = 0; i < paramsToCheckForArr.length; i++){
     if(req.reqInfo.query[paramsToCheckForArr[i]] === undefined){
-      console.log(paramsToCheckForArr[i]);
-
       callback(new HTTPError(400, "query "+paramsToCheckForArr[i]+" is missing"));
       flag = true;
       break;
@@ -41,7 +38,6 @@ function requierdParams(paramsToCheckForArr, req, callback){
 }
 
 exports.getDevices = function(req, callback) {
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -58,7 +54,6 @@ exports.getDevices = function(req, callback) {
 };
 
 exports.getUser = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -75,7 +70,6 @@ exports.getUser = function(req, callback){
 };
 
 exports.getRainGauge = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -98,7 +92,6 @@ exports.getRainGauge = function(req, callback){
 };
 
 exports.getThermostate = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -121,7 +114,6 @@ exports.getThermostate = function(req, callback){
 };
 
 exports.getOutdoorModule = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -138,7 +130,6 @@ exports.getOutdoorModule = function(req, callback){
 };
 
 exports.getIndoorModule = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -161,7 +152,6 @@ exports.getIndoorModule = function(req, callback){
 };
 
 exports.getWeatherStation = function(req, callback){
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -178,7 +168,6 @@ exports.getWeatherStation = function(req, callback){
 };
 
 exports.getSwitch = function(req, callback) {
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -195,7 +184,6 @@ exports.getSwitch = function(req, callback) {
 };
 
 exports.getSensor = function (req, callback) {
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -212,7 +200,6 @@ exports.getSensor = function (req, callback) {
 };
 
 exports.turnOn = function (req, callback) {
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
@@ -229,7 +216,6 @@ exports.turnOn = function (req, callback) {
 };
 
 exports.turnOff = function (req, callback) {
-
   getBrandBubble(req, function(err, bubble) {
     if(err) {
       callback(err);
