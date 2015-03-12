@@ -37,4 +37,8 @@ router.route('/Device/Thermostate')
 router.route('/Device/Switch')
   .get(deviceCtrl.getSwitch);
 
+// Endpoint device SensorInfo
+router.route('/Device/Sensor')
+  .get(deviceCtrl.getSensor);
+
 module.exports = router;
