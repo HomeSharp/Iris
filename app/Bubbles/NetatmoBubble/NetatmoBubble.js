@@ -167,7 +167,7 @@ exports.getDevices = function(req, callback) {
       var devices = private_DeviceListStripper(module.body.devices);
 
       var usersDeviceList = private_DeviceListFixerUpper(modules, devices);
-
+      
       callback(null, usersDeviceList);
     }
   });
@@ -333,10 +333,10 @@ private_DeviceListFixerUpper = function(modules, devices){
   var deviceList = [];
   for(var i = 0; i < modules.length; i++){
     //moduleList.push(modules[i].body)
-    deviceList.push(modules[i].body.modules[0])
+    deviceList.push(modules[i].body.devices[0])
   }
   for(var i = 0; i < devices.length; i++){
-    var modules = devices[i].body.modules[0];
+    var modules = devices[i].body.devices[0];
     deviceList.push({
       deviceId:modules.deviceId,
       mainDevice: null,
