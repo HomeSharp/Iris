@@ -41,4 +41,13 @@ router.route('/Device/Switch')
 router.route('/Device/Sensor')
   .get(deviceCtrl.getSensor);
 
+// Endpoint command turn ON
+router.route('/Command/turnOn')
+  .post(commandCtrl.turnOn);
+
+// Endpoint command turn OFF
+router.route('/Command/turnOff')
+  .post(commandCtrl.turnOff);
+
+
 module.exports = router;
