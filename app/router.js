@@ -1,6 +1,7 @@
 var express = require('express');
 var userCtrl = require('./controllers/user');
 var deviceCtrl = require('./controllers/device');
+var commandCtrl = require('./controllers/command');
 
 // Express router
 var router = express.Router();
