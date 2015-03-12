@@ -1,6 +1,7 @@
 var express = require('express');
 var userCtrl = require('./controllers/user');
 var deviceCtrl = require('./controllers/device');
+var commandCtrl = require('./controllers/command');
 
 // Express router
 var router = express.Router();
@@ -40,5 +41,14 @@ router.route('/Device/Switch')
 // Endpoint device SensorInfo
 router.route('/Device/Sensor')
   .get(deviceCtrl.getSensor);
+
+// Endpoint command turn ON
+router.route('/Command/turnOn')
+  .post(commandCtrl.turnOn);
+
+// Endpoint command turn OFF
+router.route('/Command/turnOff')
+  .post(commandCtrl.turnOff);
+
 
 module.exports = router;

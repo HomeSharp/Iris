@@ -273,3 +273,45 @@ exports.getSwitch = function(req, callback) {
     }
   });
 };
+
+exports.turnOn = function(req, callback) {
+  var options = {
+    host: 'http://api.telldus.com/json',
+    path: '/device/turnOn?id=' + req.query.deviceId + "&supportedMethods=1023",
+    queryMethods: 1023,
+    publicKey:    req.publicKey,
+    privateKey:   req.privateKey,
+    token:        req.token,
+    tokenSecret:  req.tokenSecret
+  };
+
+  telldusOauthRequest(options, function(err, data){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, data);
+    }
+  });
+};
+
+exports.turnOff = function(req, callback) {
+  var options = {
+    host: 'http://api.telldus.com/json',
+    path: '/device/turnOff?id=' + req.query.deviceId + "&supportedMethods=1023",
+    queryMethods: 1023,
+    publicKey:    req.publicKey,
+    privateKey:   req.privateKey,
+    token:        req.token,
+    tokenSecret:  req.tokenSecret
+  };
+
+  telldusOauthRequest(options, function(err, data){
+    if(err) {
+      callback(err);
+    }
+    else {
+      callback(null, data);
+    }
+  });
+};

@@ -222,14 +222,40 @@ exports.getSwitch = function(req, callback) {
 };
 
 exports.getSensor = function (req, callback) {
-    var callBubble = getBrandBubble(req, callback);
-    if (callBubble) {
-        callBubble.getSensor(req.reqInfo, function (err, sensorInfo) {
-            if (err) {
-                callback(err);
-            } else {
-                callback(null, sensorInfo);
-            }
-        });
-    }
+  var callBubble = getBrandBubble(req, callback);
+  if (callBubble) {
+    callBubble.getSensor(req.reqInfo, function (err, sensorInfo) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, sensorInfo);
+      }
+    });
+  }
+};
+
+exports.turnOn = function (req, callback) {
+  var callBubble = getBrandBubble(req, callback);
+  if (callBubble) {
+    callBubble.turnOn(req.reqInfo, function (err, data) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, data);
+      }
+    });
+  }
+};
+
+exports.turnOff = function (req, callback) {
+  var callBubble = getBrandBubble(req, callback);
+  if (callBubble) {
+    callBubble.turnOff(req.reqInfo, function (err, data) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, data);
+      }
+    });
+  }
 };
