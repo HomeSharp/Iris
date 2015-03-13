@@ -51,12 +51,14 @@ exports.getDevices = function (req, callback) {
     else {
 
       var arrOfDevices = JSON.parse(answer);
-      arrOfDevices = arrOfDevices.devices;
+      //arrOfDevices = arrOfDevices.devices;
       var arrOfDeviceResponses = [];
       var obj = {
         status : 200,
         devices: null
       }
+
+      console.log(arrOfDevices)
 
       for(var i = 0; i < arrOfDevices.length; i++){
         var res = response.ResponseModel(arrOfDevices[i].id, arrOfDevices[i].client,null, arrOfDevices[i].name,[],null, null);
