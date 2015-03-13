@@ -78,6 +78,18 @@ exports.getDevices = function (req, callback) {
         //Fråga ska mainDevice vara samma som client?  eller är det kanske clientdeviceId?
         //Vad kan vi ha på deviceType på telldus? det finns ingen indikation på vilken typ devicen är av... Kanske clientDeviceID?
         //Här kan vi inte direkt skicka med något i Arrayen med meassures då vi itne får ut några meassures av Telldus...
+        //exempel på alla attribut man kan använda sig av från telldus responset:
+        /*"id": "398674",
+          "clientDeviceId": "30",
+          "name": "Alram Status",
+          "state": 2,
+          "statevalue": "0",
+          "methods": 35,
+          "type": "device",
+          "client": "83395",
+          "clientName": "Home",
+          "online": "1",
+          "editable": 1*/
         console.log(reModel)
         arrOfDeviceResponses.push(reModel.body.devices[0]);
       }
