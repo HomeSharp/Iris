@@ -48,53 +48,6 @@ function telldusOauthRequest(options, callback) {
 
 
 exports.getDevices = function (req, callback) {
-  /*var testingPurpose =
-  {
-    "devices":[
-      {
-        "deviceId":"03:00:00:00:6a:72",
-        "mainDevice":"70:ee:50:01:ed:f0",
-        "deviceType":"IndoorModule",
-        "moduleName":"Sovrum",
-        "meassures":[
-          {
-            "type":"Temperature",
-            "value":21.2,
-            "unit":"Celsius"
-          },
-          {
-            "type":"CO2",
-            "value":659,
-            "unit":"Parts per million"
-          },
-          {
-            "type":"Humidity",
-            "value":34,
-            "unit":"Percent"
-          }
-          ]},
-      {
-        "deviceId":"03:00:00:00:85:22",
-        "mainDevice":"70:ee:50:01:ed:f0",
-        "deviceType":"IndoorModule",
-        "moduleName":"TVrum",
-        "meassures":[
-          {
-            "type":"Temperature",
-            "value":21.3,
-            "unit":"Celsius"
-          },
-          {
-            "type":"CO2",
-            "value":644,
-            "unit":"Parts per million"
-          },
-          {
-            "type":"Humidity",
-            "value":33,
-            "unit":"Percent"
-          }]
-      }]};*/
 
   var options = {
     host: 'http://api.telldus.com/json',
@@ -112,16 +65,12 @@ exports.getDevices = function (req, callback) {
     }
     else {
 
-
-      var arrOfDevices = JSON.parse(answer);
+      var arrOfDevices = JSON.parse(deviceAnswer);
       arrOfDevices = arrOfDevices.device;
       var arrOfDeviceResponses = [];
       var obj = {
-        status : 200,
         devices: null
       }
-
-
 
       for(var i = 0; i < arrOfDevices.length; i++){
         var reModel = new response.ResponseModel(arrOfDevices[i].id, arrOfDevices[i].client,null, arrOfDevices[i].name,[],null, null);
@@ -130,7 +79,7 @@ exports.getDevices = function (req, callback) {
         //Vad kan vi ha på deviceType på telldus? det finns ingen indikation på vilken typ devicen är av... Kanske clientDeviceID?
         //Här kan vi inte direkt skicka med något i Arrayen med meassures då vi itne får ut några meassures av Telldus...
         console.log(reModel)
-        arrOfDeviceResponses.push(reModel.body);
+        arrOfDeviceResponses.push(reModel.body.devices[0]);
       }
 
       obj.devices = arrOfDeviceResponses;
