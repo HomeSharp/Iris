@@ -5,10 +5,10 @@ var expect = require('expect.js');
 
 describe('Iris netatmo GET rainGauge - need valid deviceId and moduleId for all tests to be valid', function(){
   // Change this access token to a valid one before running the tests
-  var access = '52d40bac1877595a67f62431|6467bc65536a0227b1ebb904adf273bb';
+  var access = '54d0b5084b5a8854134495fa|2bced79e736b978e651b788cce0c1d79';
   var brand = "Netatmo";
-  var deviceId = "123";
-  var moduleId = "456";
+  var deviceId = "70:ee:50:01:ed:f0";
+  var moduleId = "05:00:00:00:5e:e8";
 
   it('no access to rainGauge with NO TOKEN', function(done){
     superagent.get('http://localhost:3000/api/Device/RainGauge?deviceId=' + deviceId + '&moduleId=' + moduleId)

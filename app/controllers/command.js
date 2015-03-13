@@ -1,5 +1,4 @@
 var Bubbles = require('../Bubbles/bubbles');
-var HTTPError = require('node-http-error');
 var ctrlMethods = require('./controllerMethods');
 
 exports.turnOn = function(req, res) {

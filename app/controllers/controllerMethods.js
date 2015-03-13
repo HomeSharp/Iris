@@ -1,3 +1,4 @@
+var HTTPError = require('node-http-error');
 
 exports.respondError = function(err, res){
   console.log("Error: " + err.message);
