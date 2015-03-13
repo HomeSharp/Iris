@@ -111,8 +111,9 @@ exports.getDevices = function (req, callback) {
       callback(err);
     }
     else {
-      callback(null, testingPurpose); // Temporary solution until responseModel is used
-      //getSensors(req, deviceAnswer, callback);
+      //callback(null, deviceAnswer); // Returns unformatted telldus response only devices
+      callback(null, testingPurpose); // Returns formatted hardcoded Netatmo response as temporary solution until responseModel is used
+      //getSensors(req, deviceAnswer, callback); // Returns unformatted telldus response, with devices and sensors
     }
  });
 
