@@ -5,7 +5,7 @@ var expect = require('expect.js');
 
 describe('Iris netatmo GET User', function(){
   // Change this access token to a valid one before running the tests
-  var access = '54dc81f3207759349fe610c5|448ffb500aed41cbd299e36abebaf88d';
+  var access = '54d0b5084b5a8854134495fa|2bced79e736b978e651b788cce0c1d79';
   var brand = "Netatmo";
 
     it('no access to user with NO TOKEN', function(done){

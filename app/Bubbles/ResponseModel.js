@@ -1,7 +1,7 @@
 exports.ResponseModel = function(deviceId, mainDevice, deviceType, moduleName, messuresArr, time_exec, time_server){
   this.status = 200;
   this.body = {
-    modules : [ // Should this be devices or modules?
+    devices : [ // Should this be devices or modules?
       {
         deviceId: deviceId,
         mainDevice: mainDevice,
