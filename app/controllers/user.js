@@ -1,5 +1,4 @@
 var Bubbles = require('../Bubbles/bubbles');
-var HTTPError = require('node-http-error');
 var ctrlMethods = require('./controllerMethods');
 
 exports.getUser = function(req, res) {
@@ -20,6 +19,8 @@ exports.getUser = function(req, res) {
 
 exports.getDevices = function(req, res) {
   ctrlMethods.requiredHeaders(req, function(err, reqInfo) {
+    console.log(err);
+    console.log(reqInfo);
     if(err) {
       ctrlMethods.respondError(err, res);
     } else {

@@ -5,7 +5,7 @@ var expect = require('expect.js');
 
 describe('Iris netatmo GET devicelist', function(){
   // Change this access token to a valid one before running the tests
-  var access = '52d40bac1877595a67f62431|33c5b44b904dfde7c18022bb1b5c9341';
+  var access = '54d0b5084b5a8854134495fa|2bced79e736b978e651b788cce0c1d79';
   var brand = "Netatmo";
 
     it('no access to devicelist with NO TOKEN', function(done){
