@@ -16,12 +16,15 @@ var unit = {
   "Rain"         : "Millimeter",
   "Noise"        : "Decibel",
   "Pressure"     : "Millibar",
-  "Time"         : "Seconds"
+  "Time"         : "Seconds",
+  "State"         : "State"
 };
 
 function getNameFromMethodNumber(number) {
   number = number.toString();
-  //To add more numbers for a Device: include them in the Device-array.
+  //To add more numbers for a Device: include them in the Device-array. (A device have several numbers... each one
+  //stands for the device, its just a matter of the version of the device(?)).
+  //If you own a Switch and get a method number that isnt declared in methodNumbers.Switch-array, please add it to the array.
   //To add more devices, simply add them to the methodNumber-object and Switch.
   var methodNumbers = {
     "Switch" : ["35", "3"],
@@ -101,7 +104,16 @@ exports.getDevices = function (req, callback) {
       }
       console.log(arrOfDevices[0])
       for(var i = 0; i < arrOfDevices.length; i++){
-        var reModel = new response.ResponseModel(arrOfDevices[i].id, arrOfDevices[i].clientDeviceId, getNameFromMethodNumber(arrOfDevices[i].methods), arrOfDevices[i].name,[],null, null);
+        var reModel = new response.ResponseModel(
+          arrOfDevices[i].id,
+          arrOfDevices[i].clientDeviceId,
+          getNameFromMethodNumber(arrOfDevices[i].methods),
+          arrOfDevices[i].name,
+          [
+            new response.MeasureModel("State", telldusState[arrOfDevices[i].state], unit.State),
+            new response.MeasureModel("StateValue", arrOfDevices[i].statevalue)
+          ],
+          null, null);
         //Fråga, ska idt från Telldus vara id eller ClientDeviceId ?
         //Fråga ska mainDevice vara samma som client?  eller är det kanske clientdeviceId?
         //Vad kan vi ha på deviceType på telldus? det finns ingen indikation på vilken typ devicen är av... Kanske clientDeviceID?
