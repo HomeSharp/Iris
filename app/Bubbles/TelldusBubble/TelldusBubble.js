@@ -90,6 +90,7 @@ exports.getDevices = function (req, callback) {
     tokenSecret:  req.tokenSecret
   };
 
+
   telldusOauthRequest(options, function(err, deviceAnswer){
     if(err) {
       callback(err);
@@ -133,10 +134,44 @@ exports.getDevices = function (req, callback) {
 
         arrOfDeviceResponses.push(reModel.body.devices[0]);
       }
-
       obj.devices = arrOfDeviceResponses;
+      //var sensors = getSensors(req,arrOfDeviceResponses, callback);
 
-      callback(null, JSON.stringify(obj));
+      getSensors(req, deviceAnswer, function(err, sensors){
+        if (err) {
+          callback(err);
+        }else{
+
+
+          for(var i = 0; i < sensors.sensor.length ; i++){
+            var reModel = new response.ResponseModel(
+              sensors.sensor[i].id,
+              sensors.sensor[i].client, // Kan ju inte skicka med clientDeviceId så jag skicakr med Client så länge...
+              "Sensor",//getNameFromMethodNumber(sensors.sensor[i].methods),
+              sensors.sensor[i].name,
+              [
+                //Finns inget att lägga till här (?)
+                /*{ id: '1031679',
+                  name: 'Grovéntre',
+                  lastUpdated: 1426485803,
+                  ignored: 0,
+                  client: '83395',
+                  clientName: 'Home',
+                  online: '1',
+                  editable: 1,
+                  battery: 255,
+                  keepHistory: 1 }*/
+              ],
+              null, null);
+
+            obj.devices.push(reModel.body.devices[0]);
+            //console.log(sensors.sensor[i])
+          }
+
+
+          callback(null, JSON.stringify(obj));
+        }
+      });
 
       /*//callback(null, deviceAnswer); // Returns unformatted telldus response only devices
       callback(null, testingPurpose); // Returns formatted hardcoded Netatmo response as temporary solution until responseModel is used
@@ -198,11 +233,12 @@ getSensors = function(req, deviceAnswer, callback) {
     if (err) {
       callback(err);
     } else {
-      var devices = JSON.parse(deviceAnswer);
+      /*var devices = JSON.parse(deviceAnswer);
       var sensors = JSON.parse(sensorAnswer);
-      var answer = mergeDevicesSensors(devices, sensors);
+      var answer = mergeDevicesSensors(devices, sensors);*/
 
-      callback(null, answer);
+      //return sensorAnswer;
+      callback(null, JSON.parse(sensorAnswer));
     }
   });
 };
