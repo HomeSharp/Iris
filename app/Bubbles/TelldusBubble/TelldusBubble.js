@@ -19,6 +19,34 @@ var unit = {
   "Time"         : "Seconds"
 };
 
+function getNameFromMethodNumber(number) {
+  number = number.toString();
+  //To add more numbers for a Device: include them in the Device-array.
+  //To add more devices, simply add them to the methodNumber-object and Switch.
+  var methodNumbers = {
+    "Switch" : ["35", "3"],
+    "Dimmer" : ["51"]
+  };
+
+  //A case in this Switch match with the number sent into the switch only
+  //if it contains within the array in methodNumbers-object.
+  //Otherwise null and the switch moves to the next case
+  switch(number){
+    case methodNumbers.Switch.indexOf(number) !== -1 ? number : null :
+      console.log("Switch: "+ number);
+      return "Switch";
+      break;
+    case methodNumbers.Dimmer.indexOf(number) !== -1 ? number : null :
+      console.log("Dimmer: "+ number);
+      return "Dimmer";
+      break;
+    default :
+      console.log("MethodNumber: "+ number + " was not identified by getNameFromMethodNumber");
+      return "NotIdentified";
+      break;
+  }
+}
+
 function telldusOauthRequest(options, callback) {
 
   var telOauth = new oauth.OAuth(
@@ -71,9 +99,9 @@ exports.getDevices = function (req, callback) {
       var obj = {
         devices: null
       }
-
+      console.log(arrOfDevices[0])
       for(var i = 0; i < arrOfDevices.length; i++){
-        var reModel = new response.ResponseModel(arrOfDevices[i].id, arrOfDevices[i].client,null, arrOfDevices[i].name,[],null, null);
+        var reModel = new response.ResponseModel(arrOfDevices[i].id, arrOfDevices[i].clientDeviceId, getNameFromMethodNumber(arrOfDevices[i].methods), arrOfDevices[i].name,[],null, null);
         //Fråga, ska idt från Telldus vara id eller ClientDeviceId ?
         //Fråga ska mainDevice vara samma som client?  eller är det kanske clientdeviceId?
         //Vad kan vi ha på deviceType på telldus? det finns ingen indikation på vilken typ devicen är av... Kanske clientDeviceID?
@@ -90,7 +118,7 @@ exports.getDevices = function (req, callback) {
           "clientName": "Home",
           "online": "1",
           "editable": 1*/
-        console.log(reModel)
+
         arrOfDeviceResponses.push(reModel.body.devices[0]);
       }
 
