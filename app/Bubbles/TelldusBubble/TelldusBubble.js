@@ -146,7 +146,7 @@ exports.getDevices = function (req, callback) {
           for(var i = 0; i < sensors.sensor.length ; i++){
             var reModel = new response.ResponseModel(
               sensors.sensor[i].id,
-              sensors.sensor[i].client, // Kan ju inte skicka med clientDeviceId så jag skicakr med Client så länge...
+              null,//sensors.sensor[i].client, // Kan ju inte skicka med clientDeviceId så jag skicakr med Client så länge...
               "Sensor",//getNameFromMethodNumber(sensors.sensor[i].methods),
               sensors.sensor[i].name,
               [
