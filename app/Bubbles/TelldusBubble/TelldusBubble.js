@@ -36,11 +36,11 @@ function getNameFromMethodNumber(number) {
   //Otherwise null and the switch moves to the next case
   switch(number){
     case methodNumbers.Switch.indexOf(number) !== -1 ? number : null :
-      console.log("Switch: "+ number);
+      //console.log("Switch: "+ number);
       return "Switch";
       break;
     case methodNumbers.Dimmer.indexOf(number) !== -1 ? number : null :
-      console.log("Dimmer: "+ number);
+      //console.log("Dimmer: "+ number);
       return "Dimmer";
       break;
     default :
@@ -104,7 +104,12 @@ exports.getDevices = function (req, callback) {
         devices: null
       }
       console.log(arrOfDevices[0])
+      var  regPattern = /Remote\d+#\d\d+/i; //Only support for max of 99 remotes...
+
       for(var i = 0; i < arrOfDevices.length; i++){
+
+        if(!arrOfDevices[i].name.match(regPattern)){ //Checks that device is not remote
+
         var reModel = new response.ResponseModel(
           arrOfDevices[i].id,
           arrOfDevices[i].clientDeviceId,
@@ -133,6 +138,7 @@ exports.getDevices = function (req, callback) {
           "editable": 1*/
 
         arrOfDeviceResponses.push(reModel.body.devices[0]);
+        }
       }
       obj.devices = arrOfDeviceResponses;
       //var sensors = getSensors(req,arrOfDeviceResponses, callback);
