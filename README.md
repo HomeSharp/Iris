@@ -16,7 +16,7 @@ Home Sharp API (Code Name: Iris)  is the heart of HomeSharp, handling the requ
 
 ## App structure
 
-### /
+### root/
 All the root contents, here you'll find the package.json containing the project dependencies, and also the app.js from where the app is initialized and run. In app.js the port from which the app is run can be changed.
 
 ### app/router.js
