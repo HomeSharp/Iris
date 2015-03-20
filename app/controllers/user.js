@@ -18,9 +18,7 @@ exports.getUser = function(req, res) {
 };
 
 exports.getDevices = function(req, res) {
-  ctrlMethods.requiredHeaders(req, function(err, reqInfo) {
-    console.log(err);
-    console.log(reqInfo);
+  ctrlMethods.requiredHeaders(req, function(err, reqInfo) {  
     if(err) {
       ctrlMethods.respondError(err, res);
     } else {
